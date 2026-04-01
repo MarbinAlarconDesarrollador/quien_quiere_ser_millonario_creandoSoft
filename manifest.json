@@ -1,0 +1,16 @@
+{
+    "name": "Devs Millonario",
+    "short_name": "DevsQuiz",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#0a0e2e",
+    "theme_color": "#FFD700",
+    "icons": [
+        {
+            "src": "https://cdn-icons-png.flaticon.com/512/3135/3135673.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ]
+}

@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>¿Quién quiere ser millonario? — Equipos</title>
+  <meta name="theme-color" content="#0a0e2e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+
+  <script>
+    // Registrar el Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #FFD700;
+      --gold-dark: #B8860B;
+      --gold-light: #FFF0A0;
+      --blue-deep: #0a0e2e;
+      --blue-mid: #111a4a;
+      --blue-glow: #1a3fa8;
+      --correct: #00e676;
+      --wrong: #ff1744;
+      --selected: #FF9800;
+      --text: #f0e6c8;
+      --muted: #8899bb;
+      --white: #fff;
+      --team-a: #4fc3f7;
+      --team-b: #81c784;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--blue-deep);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Stars background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 20%, rgba(26, 63, 168, 0.35) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(26, 63, 168, 0.25) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* HEADER */
+    .game-header {
+      text-align: center;
+      padding: 28px 0 20px;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+      margin-bottom: 28px;
+    }
+
+    .game-header h1 {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(22px, 5vw, 36px);
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 2px 0 rgba(0, 0, 0, 0.5);
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+    }
+
+    .game-header .subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* SCREENS */
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* ── SETUP SCREEN ── */
+    .setup-intro {
+      text-align: center;
+      margin-bottom: 24px;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .teams-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 500px) {
+      .teams-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .team-panel {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+
+    .team-panel.panel-a {
+      border-top: 3px solid var(--team-a);
+    }
+
+    .team-panel.panel-b {
+      border-top: 3px solid var(--team-b);
+    }
+
+    .team-panel-title {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      letter-spacing: 0.1em;
+    }
+
+    .panel-a .team-panel-title {
+      color: var(--team-a);
+    }
+
+    .panel-b .team-panel-title {
+      color: var(--team-b);
+    }
+
+    .player-entry {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 7px;
+    }
+
+    .player-num {
+      font-size: 11px;
+      color: var(--muted);
+      min-width: 18px;
+      text-align: right;
+    }
+
+    .player-entry input {
+      flex: 1;
+      padding: 6px 10px;
+      font-size: 13px;
+      font-family: 'Lato', sans-serif;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .player-entry input:focus {
+      border-color: rgba(255, 215, 0, 0.4);
+    }
+
+    .player-entry input::placeholder {
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    .add-player-btn {
+      width: 100%;
+      padding: 7px;
+      margin-top: 6px;
+      font-size: 12px;
+      font-family: 'Lato', sans-serif;
+      background: none;
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+      border-radius: var(--radius-sm);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .add-player-btn:hover {
+      border-color: rgba(255, 215, 0, 0.4);
+      color: var(--gold);
+    }
+
+    .setup-error {
+      text-align: center;
+      font-size: 13px;
+      color: var(--wrong);
+      min-height: 20px;
+      margin-bottom: 6px;
+    }
+
+    .start-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      font-family: 'Cinzel', serif;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      background: linear-gradient(135deg, #B8860B 0%, #FFD700 50%, #B8860B 100%);
+      background-size: 200% 100%;
+      color: #1a0e00;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-position 0.4s, transform 0.1s;
+      text-shadow: none;
+    }
+
+    .start-btn:hover {
+      background-position: 100% 0;
+    }
+
+    .start-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* ── GAME SCREEN ── */
+    .scoreboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .score-card {
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .score-card.active {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .score-card.card-a {
+      border-top: 2px solid var(--team-a);
+    }
+
+    .score-card.card-a.active {
+      border-color: var(--team-a);
+      border-width: 2px;
+      box-shadow: 0 0 16px rgba(79, 195, 247, 0.2);
+    }
+
+    .score-card.card-b {
+      border-top: 2px solid var(--team-b);
+    }
+
+    .score-card.card-b.active {
+      border-color: var(--team-b);
+      border-width: 2px;
+      box-shadow: 0 0 16px rgba(129, 199, 132, 0.2);
+    }
+
+    .score-card-name {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      margin-bottom: 2px;
+    }
+
+    .card-a .score-card-name {
+      color: var(--team-a);
+    }
+
+    .card-b .score-card-name {
+      color: var(--team-b);
+    }
+
+    .score-card-pts {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+
+    .score-card-player {
+      font-size: 11px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .turn-banner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .turn-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 0 8px currentColor;
+    }
+
+    .turn-label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .turn-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* PRIZE LADDER */
+    .prize-ladder {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .prize-step {
+      flex: 1;
+      min-width: 52px;
+      text-align: center;
+      padding: 5px 2px;
+      border-radius: 6px;
+      font-size: 11px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .prize-step.current {
+      background: rgba(255, 215, 0, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .prize-step.passed {
+      background: rgba(0, 230, 118, 0.08);
+      border-color: rgba(0, 230, 118, 0.3);
+      color: #00e676;
+    }
+
+    /* LIFELINES */
+    .lifelines-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .ll-btn {
+      padding: 7px 12px;
+      font-size: 12px;
+      font-family: 'Lato', sans-serif;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.03em;
+    }
+
+    .ll-btn:hover:not(:disabled) {
+      background: rgba(255, 215, 0, 0.15);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .ll-btn:disabled,
+    .ll-btn.used {
+      opacity: 0.28;
+      cursor: default;
+      text-decoration: line-through;
+    }
+
+    /* TIMER */
+    .timer-wrap {
+      margin-bottom: 10px;
+    }
+
+    .timer-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .timer-bar-track {
+      height: 5px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .timer-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--correct);
+      transition: width 0.5s linear, background 0.5s;
+    }
+
+    /* QUESTION */
+    .q-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      border-radius: var(--radius);
+      padding: 20px 20px 16px;
+      margin-bottom: 14px;
+    }
+
+    .q-meta {
+      font-size: 11px;
+      color: var(--gold-dark);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .q-text {
+      font-size: clamp(15px, 3vw, 18px);
+      line-height: 1.55;
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    /* OPTIONS */
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 460px) {
+      .options-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .opt-btn {
+      padding: 13px 14px;
+      font-size: 14px;
+      font-family: 'Lato', sans-serif;
+      text-align: left;
+      line-height: 1.4;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      background: rgba(255, 215, 0, 0.1);
+      border-color: rgba(255, 215, 0, 0.35);
+      color: var(--white);
+    }
+
+    .opt-btn:disabled {
+      cursor: default;
+    }
+
+    .opt-letter {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .opt-btn.selected {
+      background: rgba(255, 152, 0, 0.2);
+      border-color: var(--selected);
+      color: #ffe0b2;
+      animation: pulse-selected 0.6s ease-in-out 3;
+    }
+
+    @keyframes pulse-selected {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 0 6px rgba(255, 152, 0, 0);
+      }
+    }
+
+    .opt-btn.correct {
+      background: rgba(0, 230, 118, 0.15);
+      border-color: var(--correct);
+      color: #b9f6ca;
+    }
+
+    .opt-btn.wrong {
+      background: rgba(255, 23, 68, 0.15);
+      border-color: var(--wrong);
+      color: #ffcdd2;
+    }
+
+    .opt-btn.hidden-50 {
+      opacity: 0.18;
+      pointer-events: none;
+    }
+
+    /* EXTRA LIFELINE CONTENT */
+    .ll-extra {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      font-size: 13px;
+    }
+
+    .ll-extra-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .aud-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+
+    .aud-label {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--gold);
+      min-width: 14px;
+    }
+
+    .aud-track {
+      flex: 1;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 7px;
+      overflow: hidden;
+    }
+
+    .aud-fill {
+      height: 100%;
+      background: var(--team-a);
+      border-radius: 7px;
+      transition: width 0.8s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .aud-pct {
+      font-size: 12px;
+      color: var(--muted);
+      min-width: 32px;
+      text-align: right;
+    }
+
+    .phone-text {
+      color: var(--text);
+      line-height: 1.5;
+      border-left: 3px solid var(--team-a);
+      padding-left: 10px;
+    }
+
+    /* REVEAL */
+    .reveal-card {
+      text-align: center;
+      padding: 20px;
+      border-radius: var(--radius);
+      margin-bottom: 14px;
+      animation: reveal-in 0.4s ease-out;
+    }
+
+    @keyframes reveal-in {
+      from {
+        transform: scale(0.92);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .reveal-card.correct-reveal {
+      background: rgba(0, 230, 118, 0.12);
+      border: 1px solid rgba(0, 230, 118, 0.3);
+    }
+
+    .reveal-card.wrong-reveal,
+    .reveal-card.timeout-reveal {
+      background: rgba(255, 23, 68, 0.1);
+      border: 1px solid rgba(255, 23, 68, 0.25);
+    }
+
+    .reveal-card.skip-reveal {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .reveal-icon {
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+
+    .reveal-msg {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .correct-reveal .reveal-msg {
+      color: var(--correct);
+    }
+
+    .wrong-reveal .reveal-msg,
+    .timeout-reveal .reveal-msg {
+      color: var(--wrong);
+    }
+
+    .skip-reveal .reveal-msg {
+      color: var(--muted);
+    }
+
+    .reveal-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* NEXT BUTTON */
+    .next-btn {
+      width: 100%;
+      padding: 13px;
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      background: none;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: var(--radius);
+      color: var(--gold);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 4px;
+    }
+
+    .next-btn:hover {
+      background: rgba(255, 215, 0, 0.08);
+      border-color: var(--gold);
+    }
+
+    /* ── END SCREEN ── */
+    .end-wrap {
+      text-align: center;
+      padding: 16px 0;
+    }
+
+    .end-title {
+      font-family: 'Cinzel', serif;
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+      margin-bottom: 6px;
+    }
+
+    .end-sub {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .end-scores {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .end-team-card {
+      border-radius: var(--radius);
+      padding: 20px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .end-team-card.winner {
+      border-color: var(--gold);
+      background: rgba(255, 215, 0, 0.07);
+      box-shadow: 0 0 24px rgba(255, 215, 0, 0.15);
+    }
+
+    .end-team-name {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      margin-bottom: 4px;
+    }
+
+    .end-team-card.winner .end-team-name {
+      color: var(--gold);
+    }
+
+    .end-team-pts {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .end-team-card.winner .end-team-pts {
+      color: var(--gold);
+    }
+
+    .winner-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: #1a0e00;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-top: 6px;
+      letter-spacing: 0.06em;
+      font-family: 'Cinzel', serif;
+    }
+
+    .end-players {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--radius);
+      padding: 16px;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .end-players-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .end-player-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 13px;
+    }
+
+    .end-player-row:last-child {
+      border-bottom: none;
+    }
+
+    .ep-team {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      margin-right: 8px;
+      font-weight: 700;
+    }
+
+    .ep-team.ta {
+      background: rgba(79, 195, 247, 0.15);
+      color: var(--team-a);
+    }
+
+    .ep-team.tb {
+      background: rgba(129, 199, 132, 0.15);
+      color: var(--team-b);
+    }
+
+    .ep-name {
+      color: var(--text);
+    }
+
+    .ep-pts {
+      color: var(--gold);
+      font-weight: 700;
+    }
+
+    .restart-btn {
+      padding: 14px 40px;
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      background: linear-gradient(135deg, #B8860B 0%, #FFD700 50%, #B8860B 100%);
+      background-size: 200% 100%;
+      color: #1a0e00;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background-position 0.4s, transform 0.1s;
+    }
+
+    .restart-btn:hover {
+      background-position: 100% 0;
+    }
+
+    .restart-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* Audio button */
+    #mute-btn {
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      z-index: 999;
+      background: rgba(255, 215, 0, 0.12);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    #mute-btn:hover {
+      background: rgba(255, 215, 0, 0.22);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 215, 0, 0.2);
+      border-radius: 3px;
+    }
+
+    /* EXPLICACIÓN DE RESPUESTA */
+    .reveal-exp {
+      margin-top: 12px;
+      font-size: 13.5px;
+      color: var(--white);
+      background: rgba(0, 0, 0, 0.25);
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border-left: 3px solid var(--gold);
+      text-align: left;
+      line-height: 1.5;
+      animation: fade-in 0.8s ease-in;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ESTILOS MODAL ALEGRE/TECH */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 10, 35, 0.9);
+      backdrop-filter: blur(12px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+
+    .modal-content-pro {
+      background: linear-gradient(145deg, #111a4a, #0a0e2e);
+      border: 3px solid transparent;
+      border-image: linear-gradient(to right, #FFD700, #FF0080, #00E676) 1;
+      padding: 40px;
+      max-width: 650px;
+      width: 90%;
+      border-radius: 20px;
+      /* Nota: border-image anula border-radius en algunos navegadores, pero el gradiente lo compensa */
+      text-align: center;
+      box-shadow: 0 0 40px rgba(26, 63, 168, 0.4);
+      animation: modalPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .modal-header .emoji-main {
+      font-size: 3.5rem;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 10px var(--gold));
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 30px 0;
+    }
+
+    .rule-card {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 215, 0, 0.2);
+      transition: transform 0.3s;
+    }
+
+    .rule-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .rule-icon {
+      font-size: 1.8rem;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .rule-card p {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: #e0e0e0;
+    }
+
+    .btn-ready {
+      background: linear-gradient(90deg, #FFD700, #FFA000);
+      color: #0a0e2e;
+      border: none;
+      padding: 18px 45px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+      transition: all 0.3s;
+      font-family: 'Cinzel', serif;
+    }
+
+    .btn-ready:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 25px rgba(255, 215, 0, 0.6);
+    }
+
+    @keyframes modalPop {
+      from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* Responsivo para móviles */
+    @media (max-width: 600px) {
+      .rules-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* AJUSTES RESPONSIVE PRO */
+    @media (max-width: 768px) {
+      .modal-content-pro {
+        padding: 20px;
+        width: 95%;
+      }
+
+      .rules-grid {
+        grid-template-columns: 1fr;
+        /* Una sola columna en móvil */
+      }
+
+      .game-layout {
+        flex-direction: column;
+        /* El panel de premios se va abajo */
+      }
+
+      .side-panel {
+        width: 100% !important;
+        order: 2;
+        margin-top: 20px;
+      }
+
+      .main-panel {
+        width: 100% !important;
+        order: 1;
+      }
+
+      .opts-grid {
+        grid-template-columns: 1fr !important;
+        /* Botones de respuesta uno bajo otro */
+      }
+
+      .cinzel {
+        font-size: 1.2rem !important;
+      }
+
+      .prize-item {
+        padding: 5px !important;
+        font-size: 0.8rem !important;
+      }
+
+      /* Hacer que los controles de setup quepan */
+      .setup-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    /* Evitar que el zoom automático de iOS rompa el diseño */
+    input {
+      font-size: 16px !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- AUDIOS -->
+  <audio id="snd-tema" src="audio/tema.mp3" loop></audio>
+  <audio id="snd-seleccion" src="audio/seleccion.mp3"></audio>
+  <audio id="snd-correcto" src="audio/correcto.mp3"></audio>
+  <audio id="snd-incorrecto" src="audio/incorrecto.mp3"></audio>
+  <audio id="snd-timeout" src="audio/timeout.mp3"></audio>
+  <audio id="snd-ganador" src="audio/ganador.mp3"></audio>
+
+  <button id="mute-btn" onclick="toggleMute()" title="Silenciar / Activar">🔊</button>
+  <div id="rules-modal" class="modal-overlay">
+    <div class="modal-content-pro">
+      <div class="modal-header">
+        <div class="emoji-main">🚀</div>
+        <h2 class="cinzel gold-text">¡EL RETO CREANDO SOFT!</h2>
+      </div>
+
+      <div class="rules-grid">
+        <div class="rule-card">
+          <span class="rule-icon">👥</span>
+          <p><strong>Duelo de Squads:</strong> Equipo A vs Equipo B. La gloria (y el café) están en juego.</p>
+        </div>
+        <div class="rule-card">
+          <span class="rule-icon">⏳</span>
+          <p><strong>Sin Piedad:</strong> El reloj no perdona. Si el tiempo llega a 0, ¡es un bug fatal! O ¿Serás tú el
+            BUG?</p>
+        </div>
+        <div class="rule-card">
+          <span class="rule-icon">🛠️</span>
+          <p><strong>Stack Overflow:</strong> Usa tus comodines con sabiduría. Solo tienes un "deploy" por cada uno.</p>
+        </div>
+        <div class="rule-card">
+          <span class="rule-icon">🏆</span>
+          <p><strong>Production Ready:</strong> El equipo con más saldo en el balance final gana el sprint. !OJO cada
+            vez las preguntas valen mas lucas!</p>
+        </div>
+      </div>
+
+      <button class="btn-ready" onclick="closeRules()">¡A COMPILAR! 👨‍💻</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="game-header">
+      <h1>¿Quién quiere ser millonario?</h1>
+      <div class="subtitle">Edición equipos</div>
+    </div>
+
+    <!-- ══ SETUP SCREEN ══ -->
+    <div id="screen-setup" class="screen active">
+      <p class="setup-intro">
+        Ingresa los nombres de cada jugador.<br>
+        Mínimo 7 · Máximo 10 por equipo.
+      </p>
+      <div class="teams-grid">
+        <div class="team-panel panel-a">
+          <div class="team-panel-title">Equipo A</div>
+          <div id="players-a"></div>
+          <button class="add-player-btn" onclick="addPlayer('a')">+ Agregar jugador</button>
+        </div>
+        <div class="team-panel panel-b">
+          <div class="team-panel-title">Equipo B</div>
+          <div id="players-b"></div>
+          <button class="add-player-btn" onclick="addPlayer('b')">+ Agregar jugador</button>
+        </div>
+      </div>
+      <div class="setup-error" id="setup-error"></div>
+      <button class="start-btn" onclick="startGame()">Comenzar juego</button>
+    </div>
+
+    <!-- ══ GAME SCREEN ══ -->
+    <div id="screen-game" class="screen">
+      <div class="scoreboard">
+        <div class="score-card card-a" id="score-a">
+          <div class="score-card-name">Equipo A</div>
+          <div class="score-card-pts" id="pts-a">$0</div>
+          <div class="score-card-player" id="cur-player-a"></div>
+        </div>
+        <div class="score-card card-b" id="score-b">
+          <div class="score-card-name">Equipo B</div>
+          <div class="score-card-pts" id="pts-b">$0</div>
+          <div class="score-card-player" id="cur-player-b"></div>
+        </div>
+      </div>
+
+      <div class="turn-banner" id="turn-banner">
+        <div class="turn-dot" id="turn-dot" style="color:#4fc3f7;background:#4fc3f7;"></div>
+        <div>
+          <div class="turn-label">Turno actual</div>
+          <div class="turn-name" id="turn-name">—</div>
+        </div>
+      </div>
+
+      <div class="prize-ladder" id="prize-ladder"></div>
+
+      <div class="lifelines-row" id="lifelines">
+        <button class="ll-btn" id="ll-5050" onclick="use5050()">50 : 50</button>
+        <button class="ll-btn" id="ll-audience" onclick="useAudience()">Comodín equipo</button>
+        <button class="ll-btn" id="ll-phone" onclick="usePhone()">Llamar a alguien</button>
+        <button class="ll-btn" id="ll-skip" onclick="useSkip()">Pasar pregunta</button>
+      </div>
+
+      <div id="ll-extra"></div>
+
+      <div class="timer-wrap">
+        <div class="timer-info">
+          <span>Tiempo</span>
+          <span id="timer-text">30s</span>
+        </div>
+        <div class="timer-bar-track">
+          <div class="timer-bar-fill" id="timer-fill" style="width:100%"></div>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-meta" id="q-meta"></div>
+        <div class="q-text" id="q-text"></div>
+      </div>
+
+      <div class="options-grid" id="options"></div>
+      <div id="reveal-zone"></div>
+      <button class="next-btn" id="next-btn" style="display:none" onclick="nextTurn()">Siguiente turno →</button>
+    </div>
+
+    <!-- ══ END SCREEN ══ -->
+    <div id="screen-end" class="screen">
+      <div class="end-wrap">
+        <div class="end-title">Juego Finalizado</div>
+        <div class="end-sub" id="end-sub"></div>
+        <div class="end-scores" id="end-scores"></div>
+        <div class="end-players" id="end-players"></div>
+        <button class="restart-btn" onclick="restartGame()">Jugar de nuevo</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ════════════════════════════════════════════
+       DATA
+    ════════════════════════════════════════════ */
+    const PRIZES = [100, 200, 500, 1000, 2000, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
+    const TIMER = 30;
+    const LETTERS = ['A', 'B', 'C', 'D'];
+
+    const ALL_QUESTIONS = [
+      { q: "¿Cuál es el país más grande del mundo por área?", opts: ["Rusia", "Canadá", "China", "Estados Unidos"], ans: 0, exp: "Rusia abarca más de 17 millones de kilómetros cuadrados, ocupando gran parte de Europa del Este y el norte de Asia." },
+      { q: "¿Cuántos lados tiene un hexágono?", opts: ["5", "6", "7", "8"], ans: 1, exp: "El prefijo 'hexa' proviene del griego y significa seis." },
+      { q: "¿Quién escribió 'Cien años de soledad'?", opts: ["Pablo Neruda", "Jorge Luis Borges", "Gabriel García Márquez", "Mario Vargas Llosa"], ans: 2, exp: "Fue publicada en 1967 y es considerada la obra maestra de la literatura hispanoamericana y del realismo mágico." },
+      { q: "¿Cuál es el océano más grande del mundo?", opts: ["Atlántico", "Índico", "Ártico", "Pacífico"], ans: 3, exp: "Cubre más del 30% de la superficie del planeta, superando en tamaño a toda la masa continental de la Tierra junta." },
+      { q: "¿En qué año llegó el hombre a la Luna?", opts: ["1965", "1967", "1969", "1971"], ans: 2, exp: "La misión Apolo 11, con los astronautas Neil Armstrong y Buzz Aldrin, alunizó el 20 de julio de 1969." },
+      { q: "¿Cuál es el elemento más abundante en la corteza terrestre?", opts: ["Silicio", "Hierro", "Aluminio", "Oxígeno"], ans: 3, exp: "El oxígeno representa aproximadamente el 46.6% de la masa de la corteza terrestre." },
+      { q: "¿Cuántos huesos tiene el cuerpo humano adulto?", opts: ["196", "206", "216", "226"], ans: 1, exp: "Al nacer tenemos alrededor de 300 huesos, pero muchos se fusionan a medida que crecemos hasta llegar a 206 en la adultez." },
+      { q: "¿Cuál es la capital de Australia?", opts: ["Sídney", "Melbourne", "Brisbane", "Canberra"], ans: 3, exp: "Fue elegida como capital en 1908 como un compromiso para terminar la rivalidad entre Sídney y Melbourne." },
+      { q: "¿Qué planeta es conocido como el planeta rojo?", opts: ["Venus", "Marte", "Júpiter", "Saturno"], ans: 1, exp: "Su apariencia rojiza se debe a la abundancia de óxido de hierro (óxido) en su superficie." },
+      { q: "¿Cuántos colores tiene el arcoíris?", opts: ["5", "6", "7", "8"], ans: 2, exp: "Tradicionalmente se dividen en 7: rojo, naranja, amarillo, verde, azul, añil y violeta." },
+      { q: "¿Cuál es el río más largo del mundo?", opts: ["Amazonas", "Nilo", "Yangtsé", "Misisipi"], ans: 1, exp: "Aunque ha habido debates recientes que sugieren que el Amazonas podría ser más largo, históricamente y por consenso geográfico mayoritario, el Nilo ostenta el récord." },
+      { q: "¿Quién pintó la Mona Lisa?", opts: ["Miguel Ángel", "Rafael", "Leonardo da Vinci", "Donatello"], ans: 2, exp: "Fue pintada a principios del siglo XVI por el genio renacentista Leonardo da Vinci y se exhibe en el Louvre, París." },
+      { q: "¿Cuál es el animal terrestre más rápido?", opts: ["León", "Guepardo", "Caballo", "Leopardo"], ans: 1, exp: "El guepardo puede alcanzar velocidades de entre 100 y 120 km/h en ráfagas muy cortas." },
+      { q: "¿Cuántos planetas tiene el sistema solar?", opts: ["7", "8", "9", "10"], ans: 1, exp: "Desde que Plutón fue reclasificado como 'planeta enano' en 2006, el sistema solar tiene oficialmente 8 planetas." },
+      { q: "¿En qué continente se encuentra Egipto?", opts: ["Asia", "Europa", "América", "África"], ans: 3, exp: "Se encuentra en el extremo noreste de África, aunque la península del Sinaí sirve como puente terrestre hacia Asia." },
+      { q: "¿Cuál es la fórmula química del agua?", opts: ["CO2", "H2O", "NaCl", "O2"], ans: 1, exp: "Está compuesta por dos átomos de hidrógeno y un átomo de oxígeno." },
+      { q: "¿Quién fue el primer presidente de Estados Unidos?", opts: ["Abraham Lincoln", "Thomas Jefferson", "George Washington", "John Adams"], ans: 2, exp: "Asumió el cargo en 1789 después de liderar las fuerzas estadounidenses hacia la victoria en la Guerra de Independencia." },
+      { q: "¿Cuántos segundos hay en una hora?", opts: ["360", "600", "3600", "36000"], ans: 2, exp: "Una hora tiene 60 minutos, y cada minuto tiene 60 segundos (60 x 60 = 3600)." },
+      { q: "¿Cuál es el idioma más hablado en el mundo?", opts: ["Inglés", "Español", "Mandarín", "Hindi"], ans: 2, exp: "Considerando únicamente hablantes nativos (primera lengua), el chino mandarín es el más hablado." },
+      { q: "¿Cuál es la montaña más alta del mundo?", opts: ["K2", "Kangchenjunga", "Everest", "Lhotse"], ans: 2, exp: "Se eleva a unos 8,848 metros sobre el nivel del mar en la cordillera del Himalaya." },
+      { q: "¿Cuántos jugadores hay en un equipo de fútbol?", opts: ["9", "10", "11", "12"], ans: 2, exp: "Cada equipo entra al campo con 11 jugadores: un portero y 10 jugadores de campo." },
+      { q: "¿Cuál es el metal más conductor de electricidad?", opts: ["Oro", "Cobre", "Plata", "Aluminio"], ans: 2, exp: "Aunque el cobre y el oro son excelentes (y más baratos/resistentes), la plata pura tiene la mayor conductividad eléctrica y térmica." },
+      { q: "¿En qué año se firmó la Declaración de Independencia de EE.UU.?", opts: ["1774", "1776", "1778", "1780"], ans: 1, exp: "Fue adoptada el 4 de julio de 1776, proclamando la separación de las trece colonias británicas." },
+      { q: "¿Cuál es el país con más población del mundo?", opts: ["India", "China", "Estados Unidos", "Indonesia"], ans: 0, exp: "A mediados de 2023, estimaciones de la ONU confirmaron que India superó oficialmente a China como el país más poblado." },
+      { q: "¿Qué científico propuso la teoría de la relatividad?", opts: ["Newton", "Darwin", "Einstein", "Hawking"], ans: 2, exp: "Albert Einstein publicó la Teoría de la Relatividad Especial en 1905 y la General en 1915." },
+      { q: "¿Cuántos continentes hay en el mundo?", opts: ["5", "6", "7", "8"], ans: 2, exp: "En el modelo geográfico más extendido internacionalmente se cuentan 7: Norteamérica, Suramérica, Europa, Asia, África, Oceanía y Antártida." },
+      { q: "¿Cuál es el instrumento de cuerdas más grande de la orquesta?", opts: ["Violín", "Viola", "Cello", "Contrabajo"], ans: 3, exp: "Es el instrumento de arco de mayores dimensiones y el que produce los sonidos más graves en la orquesta sinfónica." },
+      { q: "¿En qué país se inventó el papel?", opts: ["Japón", "Egipto", "China", "India"], ans: 2, exp: "Tradicionalmente se atribuye su invención a Cai Lun en China, alrededor del año 105 d.C." },
+      { q: "¿Cuántos gramos hay en un kilogramo?", opts: ["10", "100", "1000", "10000"], ans: 2, exp: "El prefijo 'kilo' en el Sistema Internacional de Unidades significa exactamente mil." },
+      { q: "¿Cuál es la capital de Japón?", opts: ["Osaka", "Kioto", "Tokio", "Hiroshima"], ans: 2, exp: "Tokio, anteriormente conocida como Edo, se convirtió en la capital de Japón en el año 1868." },
+      { q: "¿Quién escribió 'Don Quijote de la Mancha'?", opts: ["Lope de Vega", "Francisco de Quevedo", "Miguel de Cervantes", "Calderón de la Barca"], ans: 2, exp: "Publicada a inicios de 1605, es considerada por muchos como la primera novela moderna de la historia." },
+      { q: "¿Cuántos cromosomas tiene una célula humana normal?", opts: ["23", "44", "46", "48"], ans: 2, exp: "Tienen 23 pares, lo que da un total de 46 cromosomas que contienen nuestro ADN." },
+      { q: "¿Cuál es el gas más abundante en la atmósfera terrestre?", opts: ["Oxígeno", "Argón", "Dióxido de carbono", "Nitrógeno"], ans: 3, exp: "El nitrógeno compone casi el 78% del aire que respiramos, frente al 21% del oxígeno." },
+      { q: "¿En qué año cayó el Muro de Berlín?", opts: ["1987", "1988", "1989", "1990"], ans: 2, exp: "La noche del 9 al 10 de noviembre de 1989 se abrieron las fronteras, simbolizando el inminente fin de la Guerra Fría." },
+      { q: "¿Cuál es el hueso más largo del cuerpo humano?", opts: ["Tibia", "Fémur", "Radio", "Húmero"], ans: 1, exp: "Es el hueso del muslo, y no solo es el más largo sino también el más fuerte y voluminoso del esqueleto humano." },
+      { q: "¿Cuántas notas musicales hay en la escala diatónica?", opts: ["5", "6", "7", "8"], ans: 2, exp: "Son siete notas naturales: Do, Re, Mi, Fa, Sol, La, Si." },
+      { q: "¿Cuál es el lago más profundo del mundo?", opts: ["Lago Superior", "Lago Victoria", "Lago Baikal", "Mar Caspio"], ans: 2, exp: "El lago Baikal, situado en Siberia (Rusia), alcanza una profundidad máxima de más de 1,640 metros." },
+      { q: "¿Qué planeta tiene los anillos más visibles?", opts: ["Júpiter", "Saturno", "Urano", "Neptuno"], ans: 1, exp: "El sistema de anillos de Saturno es el más espectacular, compuesto principalmente de innumerables partículas de hielo y roca." },
+      { q: "¿Cuál es la moneda de Japón?", opts: ["Yuan", "Won", "Yen", "Baht"], ans: 2, exp: "El yen japonés fue adoptado oficialmente en el año 1871." },
+      { q: "¿Cuántos lados tiene un triángulo?", opts: ["2", "3", "4", "5"], ans: 1, exp: "La palabra proviene del latín 'triangulus', que se refiere a una figura geométrica de tres ángulos y, por ende, tres lados." },
+      { q: "¿Qué país tiene forma de bota?", opts: ["España", "Grecia", "Portugal", "Italia"], ans: 3, exp: "La península itálica tiene una inconfundible forma de bota, en la que la 'punta' parece estar pateando a la isla de Sicilia." },
+      { q: "¿Cuántos dientes permanentes tiene un adulto?", opts: ["28", "30", "32", "34"], ans: 2, exp: "Un adulto sano desarrolla un total de 32 dientes, incluyendo las cuatro muelas del juicio." },
+      { q: "¿Quién compuso 'La novena sinfonía'?", opts: ["Mozart", "Bach", "Beethoven", "Chopin"], ans: 2, exp: "Ludwig van Beethoven la completó en 1824 estando ya completamente sordo. Incluye la célebre 'Oda a la Alegría'." },
+      { q: "¿Cuántos litros tiene un galón americano?", opts: ["2.78", "3.78", "4.78", "5.78"], ans: 1, exp: "Un galón líquido estadounidense equivale exactamente a 3.78541 litros." },
+      { q: "¿En qué país nació el fútbol moderno?", opts: ["Francia", "España", "Brasil", "Inglaterra"], ans: 3, exp: "Las primeras reglas modernas (Las Reglas de Cambridge y luego las de la Football Association) se redactaron en Inglaterra en 1863." },
+      { q: "¿Cuál es el planeta más grande del sistema solar?", opts: ["Saturno", "Neptuno", "Júpiter", "Urano"], ans: 2, exp: "Es un gigante gaseoso cuya masa es más de 300 veces mayor que la de nuestro planeta Tierra." },
+      { q: "¿Cuál es la velocidad de la luz en km/s aproximadamente?", opts: ["100.000", "200.000", "300.000", "400.000"], ans: 2, exp: "En el vacío, la luz viaja a exactamente 299,792 kilómetros por segundo (se redondea a 300,000)." },
+      { q: "¿Cuántos estados tiene México?", opts: ["28", "30", "31", "32"], ans: 3, exp: "Oficialmente, México está compuesto por 31 estados libres y soberanos, más la Ciudad de México, sumando 32 entidades federativas." },
+      { q: "¿Cuál es el animal más grande del mundo?", opts: ["Elefante africano", "Ballena jorobada", "Ballena azul", "Tiburón ballena"], ans: 2, exp: "La ballena azul es el animal conocido más grande que jamás haya existido, pudiendo alcanzar los 30 metros de largo y pesar hasta 200 toneladas." },
+      { q: "¿En qué ciudad se celebraron los Juegos Olímpicos de 2016?", opts: ["Londres", "Río de Janeiro", "Tokio", "Pekín"], ans: 1, exp: "Fueron los primeros Juegos Olímpicos celebrados en América del Sur, en Brasil." },
+      { q: "¿En qué año se llevó a cabo la Batalla de Boyacá, sellando la independencia de Colombia?", opts: ["1810", "1819", "1821", "1830"], ans: 1, exp: "Ocurrió el 7 de agosto de 1819, garantizando el éxito de la Campaña Libertadora de Nueva Granada liderada por Bolívar." },
+      { q: "¿Quién tradujo los Derechos del Hombre y del Ciudadano del francés al español en la Nueva Granada?", opts: ["Simón Bolívar", "Francisco de Paula Santander", "Antonio Nariño", "Camilo Torres"], ans: 2, exp: "Antonio Nariño los tradujo y publicó de forma clandestina en 1793, lo que le costó cárcel y exilio." },
+      { q: "¿Qué evento histórico desató el periodo conocido como 'El Bogotazo' en 1948?", opts: ["El golpe de estado de Rojas Pinilla", "El asesinato de Jorge Eliécer Gaitán", "El inicio de la Guerra de los Mil Días", "La separación de Panamá"], ans: 1, exp: "El 9 de abril de 1948 el líder popular liberal fue asesinado, provocando masivos disturbios que destruyeron el centro de Bogotá." },
+      { q: "¿Cuál es el río más largo que corre completamente dentro de territorio colombiano?", opts: ["Río Cauca", "Río Atrato", "Río Magdalena", "Río Putumayo"], ans: 2, exp: "Con una longitud de más de 1,500 km, el Río Magdalena es la principal arteria fluvial y económica histórica de Colombia." },
+      { q: "¿Cuántos departamentos conforman territorialmente a Colombia?", opts: ["28", "30", "32", "34"], ans: 2, exp: "Según la Constitución de 1991, Colombia se divide en 32 departamentos y un Distrito Capital (Bogotá)." },
+      { q: "¿Quién fue el primer presidente de la Gran Colombia?", opts: ["Simón Bolívar", "Francisco de Paula Santander", "Rafael Núñez", "Tomás Cipriano de Mosquera"], ans: 0, exp: "Simón Bolívar fue elegido presidente en 1819 tras el Congreso de Angostura que formó esta extensa nación." },
+      { q: "¿En qué año se promulgó la actual Constitución Política de Colombia?", opts: ["1886", "1991", "1994", "2000"], ans: 1, exp: "Fue promulgada el 4 de julio de 1991, reemplazando a la centenaria Constitución de 1886." },
+      { q: "¿Cuál es la flor nacional de Colombia?", opts: ["La Rosa", "La Margarita", "El Girasol", "La Orquídea"], ans: 3, exp: "Específicamente la variedad endémica *Cattleya trianae*, nombrada en honor al botánico colombiano Jerónimo Triana." },
+      { q: "¿Qué importante civilización precolombina habitó principalmente los departamentos de Cundinamarca y Boyacá?", opts: ["Los Tayronas", "Los Quimbayas", "Los Muiscas", "Los Calimas"], ans: 2, exp: "Los Muiscas fueron una cultura agraria y orfebre muy avanzada, de la cual se origina la famosa leyenda de El Dorado." },
+      { q: "¿Cuál de las siguientes ciudades fue fundada por el conquistador Pedro de Heredia?", opts: ["Santa Marta", "Bogotá", "Cali", "Cartagena de Indias"], ans: 3, exp: "Fue fundada el 1 de junio de 1533 y se convirtió en uno de los puertos más importantes de América española." },
+      { q: "¿Qué colombiano ganó el Premio Nobel de Literatura en 1982?", opts: ["Álvaro Mutis", "Gabriel García Márquez", "Fernando Vallejo", "Jorge Isaacs"], ans: 1, exp: "La Academia Sueca lo galardonó 'por sus novelas e historias cortas, en las que lo fantástico y lo real se combinan en un mundo ricamente compuesto'." },
+      { q: "¿Entre qué años se libró la Guerra de los Mil Días en Colombia?", opts: ["1899 - 1902", "1910 - 1913", "1886 - 1889", "1948 - 1951"], ans: 0, exp: "Fue el conflicto civil más devastador en la historia del país, enfrentando al Partido Liberal y al Partido Conservador." },
+      { q: "¿Cuál es el árbol nacional de Colombia?", opts: ["El Guayacán", "La Ceiba", "La Palma de Cera del Quindío", "El Roble Andino"], ans: 2, exp: "Es endémica del Valle de Cocora, puede alcanzar hasta 60 metros de altura y es la palmera más alta del mundo." },
+      { q: "¿Qué fecha se celebra como el Día de la Independencia de Cartagena?", opts: ["20 de julio", "7 de agosto", "12 de octubre", "11 de noviembre"], ans: 3, exp: "El 11 de noviembre de 1811 Cartagena se declaró como Estado soberano e independiente de la corona española." },
+      { q: "¿Cuál es el punto geográfico más alto de Colombia?", opts: ["El Volcán Nevado del Ruiz", "El Pico Cristóbal Colón", "El Ritacuba Blanco", "El Nevado del Huila"], ans: 1, exp: "Junto con su pico gemelo (Simón Bolívar) en la Sierra Nevada de Santa Marta, alcanza aproximadamente 5,730 m s.n.m." },
+      { q: "¿A qué presidente colombiano se le otorgó el Premio Nobel de la Paz en 2016?", opts: ["Álvaro Uribe Vélez", "Juan Manuel Santos", "Andrés Pastrana", "César Gaviria"], ans: 1, exp: "Se le otorgó por sus firmes esfuerzos para poner fin a la guerra de más de 50 años con la guerrilla de las FARC." },
+      { q: "¿Cuál fue el principal producto de exportación de Colombia durante la primera mitad del siglo XX?", opts: ["Banano", "Oro", "Petróleo", "Café"], ans: 3, exp: "El auge cafetero fue fundamental para integrar a Colombia en el mercado mundial moderno y estabilizar su economía." },
+      { q: "¿Con qué países comparte fronteras terrestres Colombia?", opts: ["Venezuela, Brasil, Perú, Ecuador y Panamá", "Venezuela, Brasil, Bolivia, Ecuador y Panamá", "Venezuela, Brasil, Perú, Chile y Panamá", "Venezuela, Argentina, Perú, Ecuador y Panamá"], ans: 0, exp: "Es el único país de América del Sur que cuenta con costas en los océanos Pacífico y Atlántico, y hace frontera terrestre con esos 5 países." },
+      { q: "¿Qué importante líder indígena luchó contra la colonización española en la región del Cauca?", opts: ["La Gaitana", "Tupac Amaru", "Benkos Biohó", "Atahualpa"], ans: 0, exp: "La Cacica Gaitana lideró una fuerte resistencia en la década de 1530 en represalia por el brutal asesinato de su hijo por los conquistadores." },
+      { q: "¿Cómo se llama la cultura precolombina famosa por su compleja orfebrería y el 'Poporo'?", opts: ["San Agustín", "Tierradentro", "Quimbaya", "Zenú"], ans: 2, exp: "La cultura Quimbaya destacó enormemente por su trabajo en tumbaga (aleación de oro y cobre) con una técnica y estética excepcionales." },
+      { q: "¿Cuál es el nombre oficial del miedo irracional a las palabras largas?", opts: ["Papirofobia", "Hipopotomonstrosesquipedaliofobia", "Aulofobia", "Pentaterafobia"], ans: 1, exp: "Irónicamente, la palabra para definir el miedo a las palabras largas es una de las más largas del diccionario." },
+      { q: "En el estado de Florida (EE.UU.), ¿qué es ilegal hacerle a un elefante si lo dejas atado a un parquímetro?", opts: ["No darle agua", "No pagar la tarifa del parquímetro", "Pintarlo de rosa", "Llevarlo sin correa"], ans: 1, exp: "Según una ley antigua, si dejas un elefante atado a un parquímetro, debes pagar la tarifa como si fuera un vehículo o podrías ser multado." },
+      { q: "¿Cuál de estos animales NO puede saltar?", opts: ["Elefante", "Canguro", "Grillo", "Pulga"], ans: 0, exp: "Debido a su enorme peso y a la estructura de sus huesos, el elefante es el único mamífero que tiene cuatro rodillas pero no puede despegar las cuatro patas del suelo a la vez." },
+      { q: "¿Qué inventó accidentalmente el químico John Walker cuando intentaba limpiar una sustancia pegajosa de un palo?", opts: ["El chicle", "El pegamento líquido", "Los fósforos (cerillas)", "La dinamita"], ans: 2, exp: "Al raspar el palo contra el suelo para limpiar la punta, esta se encendió. Así nacieron los fósforos de fricción en 1826." },
+      { q: "¿Cuál era el sabor original del relleno de los pastelitos 'Twinkies' antes de la Segunda Guerra Mundial?", opts: ["Vainilla", "Fresa", "Banana", "Chocolate"], ans: 2, exp: "Originalmente eran de banana, pero debido al racionamiento de frutas durante la guerra, cambiaron a vainilla y así se quedaron por su éxito." },
+      { q: "¿Qué animal tiene las huellas dactilares tan parecidas a las humanas que a veces confunden a los forenses en escenas del crimen?", opts: ["Chimpancé", "Koala", "Perro", "Oso"], ans: 1, exp: "Los koalas tienen crestas dactilares tan similares a las nuestras que incluso bajo el microscopio es difícil distinguirlas." },
+      { q: "En 2006, un hombre intentó vender ¿qué país? a través de una subasta en eBay.", opts: ["Nueva Zelanda", "Islandia", "Grecia", "Suiza"], ans: 0, exp: "Un ciudadano australiano intentó vender Nueva Zelanda con un precio inicial de 0.01 dólares. La oferta llegó a 3,000 dólares antes de que eBay cerrara la subasta." },
+      { q: "¿Cuál fue el primer juguete que se anunció por televisión en la historia?", opts: ["Barbie", "LEGO", "Sr. Cara de Papa (Mr. Potato Head)", "Hot Wheels"], ans: 2, exp: "Fue en 1952. Curiosamente, en esa época el juguete consistía solo en las piezas, y los niños debían usar una papa real de su cocina para armarlo." },
+      { q: "¿Qué parte de su cuerpo usan las mariposas para percibir el sabor de las cosas?", opts: ["Las alas", "Las antenas", "Las patas", "La espiritrompa"], ans: 2, exp: "Tienen sensores químicos en sus patas; al posarse sobre una flor o planta, saben inmediatamente si es algo dulce o apto para poner sus huevos." },
+      { q: "¿Cómo se llama el sonido que hace el estómago cuando tienes hambre (y que suena como un rugido)?", opts: ["Gorgorismo", "Borborigmo", "Estruendo gástrico", "Flatulencia"], ans: 1, exp: "El término médico es 'borborigmo' y es causado por el movimiento de gases y fluidos a través de los intestinos." },
+      { q: "¿Cuál de estas frutas pertenece técnicamente a la familia de las bayas, mientras que la fresa NO lo es?", opts: ["Manzana", "Banana", "Pera", "Durazno"], ans: 1, exp: "Botánicamente, una baya es un fruto producido a partir de un solo ovario. La banana y la sandía son bayas, pero la fresa es un 'fruto accesorio'." },
+      { q: "¿Qué animal produce una leche de color rosa brillante?", opts: ["Hipopótamo", "Flamenco", "Ornitorrinco", "Cerdo"], ans: 0, exp: "El hipopótamo secreta dos tipos de ácidos (hiposudórico y norhiposudórico) que al mezclarse con la leche blanca le dan un tono rosáceo." },
+      { q: "¿Cuál es el récord de tiempo que una gallina ha logrado volar sin tocar el suelo?", opts: ["13 segundos", "1 minuto", "5 minutos", "30 segundos"], ans: 0, exp: "El vuelo más largo registrado de una gallina doméstica es de apenas 13 segundos (recorriendo unos 91 metros)." },
+      { q: "¿Qué país tiene más flamencos de plástico que flamencos reales?", opts: ["España", "Estados Unidos", "México", "Chile"], ans: 1, exp: "Desde que fueron inventados en 1957 como adorno de jardín, las ventas de flamencos rosas de plástico en EE.UU. superan por mucho a la población mundial de flamencos vivos." },
+      { q: "Si Google detecta que no tienes internet, ¿qué animal aparece para que juegues un minijuego?", opts: ["Un gato", "Un dinosaurio", "Un perro", "Un alien"], ans: 1, exp: "Es un Tiranosaurio Rex, haciendo alusión a que estar sin internet es como vivir en la 'era prehistórica'." },
+      { q: "¿Cuál es el nombre del municipio en Boyacá que, curiosamente, se llama igual que un país europeo?", opts: ["Francia", "Grecia", "Turquía", "Jericó"], ans: 1, exp: "Se trata de Grecia, Boyacá. Aunque también tenemos municipios como Belén, Jericó (Antioquia) o Egipto (barrio en Bogotá), Grecia es el que más confunde en mapas." },
+      { q: "¿Qué ingrediente 'polémico' le echan muchos colombianos al chocolate caliente o al aguapanela?", opts: ["Sal", "Pimienta", "Queso", "Mantequilla"], ans: 2, exp: "Poner queso dentro del chocolate es una tradición colombiana que horroriza a extranjeros pero que nosotros defendemos a capa y espada." },
+      { q: "¿En qué ciudad de Colombia es común que te digan '¿Bien o qué?' como saludo oficial?", opts: ["Bogotá", "Medellín", "Cali", "Barranquilla"], ans: 1, exp: "Es la marca registrada del saludo paisa. Si no respondes 'Bien, ¿y vos?', probablemente no estés en Medellín." },
+      { q: "Si un colombiano te dice que algo está 'a pedir de boca', ¿qué significa?", opts: ["Que está muy caro", "Que está perfecto o como se deseaba", "Que tiene mucha hambre", "Que alguien está gritando"], ans: 1, exp: "Es una expresión usada para indicar que algo salió exactamente como se quería o que está en su punto ideal." },
+      { q: "¿Cuál es el nombre del plato que lleva arroz, huevo, carne molida, chicharrón, tajada, chorizo y aguacate?", opts: ["Ajiaco", "Bandeja Paisa", "Sancocho", "Mote de Queso"], ans: 1, exp: "La Bandeja Paisa es famosa por su enorme cantidad de calorías y por ser el 'terror' de las dietas, pero el orgullo de Antioquia." },
+      { q: "¿Qué animal aparece en la moneda de 500 pesos colombianos?", opts: ["El Cóndor de los Andes", "La Rana de Cristal", "La Tortuga Caguama", "El Oso de Anteojos"], ans: 1, exp: "La moneda de 500 pesos rinde homenaje a la rana de cristal, un anfibio fascinante que habita en nuestras selvas." },
+      { q: "¿Cuál es el 'deporte nacional' de Colombia que consiste en lanzar discos de metal a unos sobres con pólvora?", opts: ["Fútbol", "Ciclismo", "Tejo (Turmequé)", "Bolo Criollo"], ans: 2, exp: "El Tejo es el único deporte nacional por ley. No hay nada más colombiano que celebrar una 'mecha' con un estallido de pólvora." },
+      { q: "¿Qué significa la expresión colombiana 'Hacer una vaca'?", opts: ["Comprar ganado", "Recolectar dinero entre varias personas", "Irse a dormir temprano", "Cocinar carne de res"], ans: 1, exp: "'Hacer una vaca' es la solución colombiana para comprar la pizza o el trago cuando nadie tiene suficiente dinero por separado." },
+      { q: "¿En qué ciudad se celebra el festival de 'Blancos y Negros'?", opts: ["Quibdó", "Pasto", "Riohacha", "Manizales"], ans: 1, exp: "Se celebra en Pasto cada enero y es Patrimonio Cultural de la Humanidad. ¡Nadie se salva de quedar pintado de cosmético o harina!" },
+      { q: "¿Cuál es el nombre del famoso sistema de transporte masivo de Bogotá que todos aman odiar?", opts: ["Metro", "TransMilenio", "Mío", "Transmetro"], ans: 1, exp: "TransMilenio se inauguró en el año 2000. Aunque es vital para la ciudad, es el protagonista de miles de memes y anécdotas diarias." },
+      { q: "Si alguien te dice que 'está tragado', ¿qué le pasa?", opts: ["Que comió mucho", "Que está muy enamorado", "Que lo detuvo la policía", "Que tiene sueño"], ans: 1, exp: "En Colombia, 'estar tragado' no tiene nada que ver con comida, sino con estar profundamente enamorado de alguien." },
+      { q: "¿Cuál es la capital mundial del vallenato?", opts: ["Montería", "Sincelejo", "Valledupar", "Santa Marta"], ans: 2, exp: "Valledupar es la cuna del acordeón y cada año celebra el Festival de la Leyenda Vallenata." },
+      { q: "¿Qué pasa si un colombiano te dice 'nos vemos a las 8'?", opts: ["Llegará a las 7:50", "Llegará a las 8 en punto", "Llegará probablemente a las 8:30 o 9:00", "No va a ir"], ans: 2, exp: "La 'hora colombiana' es un fenómeno social donde llegar 30 minutos tarde se considera, en muchos contextos, como llegar 'a tiempo'." },
+      { q: "¿Qué animal fue el primer 'Bug' real de la historia, hallado dentro de una computadora Mark II en 1947?", opts: ["Una cucaracha", "Una polilla", "Una araña", "Un ratón"], ans: 1, exp: "Grace Hopper halló una polilla atrapada en un relé de la computadora. La pegó en el diario de bitácora con la frase: 'Primer caso real de bicho (bug) siendo hallado'." },
+      { q: "¿Cuál es la principal causa de que un código que funcionaba ayer, hoy no funcione sin haber tocado nada?", opts: ["Rayos cósmicos", "El caché", "Fuerzas oscuras", "Mercurio retrógrado"], ans: 1, exp: "Aunque los rayos cósmicos pueden alterar bits, el 99% de las veces es el caché, una dependencia que se actualizó sola o una variable de entorno que alguien cambió." },
+      { q: "¿Cómo se llama la 'ley' que dice que el desarrollo de software siempre tarda más de lo que esperas, incluso cuando tienes en cuenta esta ley?", opts: ["Ley de Moore", "Ley de Murphy", "Ley de Hofstadter", "Ley de Brooks"], ans: 2, exp: "La Ley de Hofstadter es un bucle infinito recursivo que explica por qué los 'deadlines' son el mayor mito de nuestra industria." },
+      { q: "¿Qué significa cuando un programador dice que un error en el sistema 'No es un bug, es una...'?", opts: ["Actualización", "Optimización", "Funcionalidad (Feature)", "Sugerencia"], ans: 2, exp: "Es la frase clásica para documentar un error inesperado que decidimos dejar en el sistema porque 'aporta algo' (o no sabemos cómo arreglarlo)." },
+      { q: "¿Cuál es el lenguaje de programación 'esotérico' que solo utiliza 8 caracteres y es casi imposible de leer?", opts: ["Java", "Brainf*ck", "Python", "C++"], ans: 1, exp: "Brainf*ck fue diseñado para ser minimalista y extremadamente difícil de programar, ideal para masoquistas del código." },
+      { q: "¿Cuál fue el primer dominio registrado en la historia de Internet (marzo de 1985)?", opts: ["apple.com", "google.com", "symbolics.com", "microsoft.com"], ans: 2, exp: "Symbolics.com fue el primero. Eran una empresa de computadoras que fabricaba máquinas basadas en Lisp." },
+      { q: "¿Qué significa la frase 'Rubber Ducking' (Pato de Goma) en programación?", opts: ["Regalar juguetes", "Decorar el setup", "Explicarle el código a un objeto inanimado para hallar errores", "Un tipo de cifrado"], ans: 2, exp: "Al explicar el flujo del código en voz alta a un patito de goma, el cerebro procesa el error de lógica por sí mismo. ¡Funciona mejor que StackOverflow!" },
+      { q: "En la cultura geek, ¿cuál es la 'Respuesta a la Pregunta Definitiva sobre la Vida, el Universo y Todo'?", opts: ["101", "42", "7", "Error 404"], ans: 1, exp: "Según 'Guía del autoestopista galáctico' de Douglas Adams, una supercomputadora tardó 7.5 millones de años en calcular que la respuesta es 42." },
+      { q: "¿Cuál es el nombre del lenguaje de programación creado por el cofundador de Netscape que se escribió en solo 10 días?", opts: ["PHP", "JavaScript", "Ruby", "TypeScript"], ans: 1, exp: "Brendan Eich creó JavaScript en 10 días en mayo de 1995. Eso explica algunas de sus... 'peculiaridades' matemáticas iniciales." },
+      { q: "¿Qué pasa si intentas acceder al código 418 de una respuesta HTTP?", opts: ["Forbidden", "I'm a teapot (Soy una tetera)", "Bad Gateway", "Enhance your calm"], ans: 1, exp: "Es un protocolo de broma (HTCPCP) creado para el Día de los Inocentes en 1998 para cafeteras conectadas a internet." },
+      { q: "¿Cuál es la mentira más grande que un desarrollador se dice a sí mismo?", opts: ["'Lo termino en 5 minutos'", "'No necesito documentación'", "'Este cambio no romperá nada en producción'", "Todas las anteriores"], ans: 3, exp: "El exceso de optimismo es el compilador por defecto del corazón de un desarrollador." },
+      { q: "¿Por qué los programadores prefieren el 'Dark Mode' (Modo Oscuro)?", opts: ["Porque se ve más cool", "Porque la luz atrae a los bichos (bugs)", "Por salud visual", "Para ahorrar batería"], ans: 1, exp: "Es un chiste clásico: 'La luz atrae a los bugs'. Aunque en realidad es para no quedar ciegos tras 12 horas frente al monitor." },
+      { q: "¿Cuál de estos NO es un nombre real de una vulnerabilidad famosa?", opts: ["Heartbleed", "Shellshock", "Meltdown", "BlueScreenOfDeath"], ans: 3, exp: "Blue Screen of Death es un error crítico de Windows, pero no es el nombre de un exploit o vulnerabilidad de seguridad como los otros tres." },
+      { q: "¿Qué hace el comando 'sudo' en sistemas Linux/Unix?", opts: ["Saludar al usuario", "Ejecutar con privilegios de superusuario", "Borrar archivos temporales", "Optimizar el disco"], ans: 1, exp: "Sudo (SuperUser Do) es el 'Hazme un sándwich' del mundo de los servidores. Si él lo dice, se hace." }
+
+    ];
+
+    /* ════════════════════════════════════════════
+       STATE
+    ════════════════════════════════════════════ */
+    let teamA = [], teamB = [];
+    let scores = { a: 0, b: 0 };
+    let playerScores = { a: [], b: [] };
+    let turnIndex = 0; // global turn count
+    let currentTeam = 'a';
+    let currentQ = null;
+    let timerInterval = null;
+    let timeLeft = TIMER;
+    let answered = false;
+    let questionPool = [];
+    let qIndex = 0;
+    let maxTurns = 0;
+    let prizeLevel = 0;
+    let teamLifelines = {
+      a: { '5050': false, audience: false, phone: false, skip: false },
+      b: { '5050': false, audience: false, phone: false, skip: false }
+    };
+    let lifelines = {};
+    let hiddenOpts = [];
+
+    /* ════════════════════════════════════════════
+       SETUP
+    ════════════════════════════════════════════ */
+
+    function closeRules() {
+      const modal = document.getElementById('rules-modal');
+      modal.style.transition = 'all 0.4s ease';
+      modal.style.opacity = '0';
+      modal.style.transform = 'translateY(-20px)';
+
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 400);
+    }
+
+    function shuffle(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+    function renderSetup(team) {
+      const arr = team === 'a' ? teamA : teamB;
+      const el = document.getElementById('players-' + team);
+      el.innerHTML = '';
+      arr.forEach((p, i) => {
+        const row = document.createElement('div');
+        row.className = 'player-entry';
+        row.innerHTML = `<span class="player-num">${i + 1}.</span>
+      <input type="text" value="${p}" placeholder="Jugador ${i + 1}"
+        oninput="(team==='a'?teamA:teamB)[${i}]=this.value"
+        onchange="(team==='a'?teamA:teamB)[${i}]=this.value" />`;
+        // Bind correctly
+        row.querySelector('input').addEventListener('input', function () { (team === 'a' ? teamA : teamB)[i] = this.value; });
+        el.appendChild(row);
+      });
+    }
+
+    function addPlayer(team) {
+      const arr = team === 'a' ? teamA : teamB;
+      if (arr.length >= 10) return;
+      arr.push('');
+      renderSetup(team);
+    }
+
+    function startGame() {
+      const err = document.getElementById('setup-error');
+      if (teamA.length < 7 || teamB.length < 7) { err.textContent = 'Cada equipo necesita mínimo 7 jugadores.'; return; }
+      err.textContent = '';
+      scores = { a: 0, b: 0 };
+      playerScores = {
+        a: teamA.map(n => ({ name: n.trim() || 'Jugador', pts: 0 })),
+        b: teamB.map(n => ({ name: n.trim() || 'Jugador', pts: 0 }))
+      };
+      turnIndex = 0;
+      currentTeam = 'a';
+      questionPool = shuffle([...ALL_QUESTIONS]);
+      qIndex = 0;
+      maxTurns = Math.min(teamA.length, teamB.length) * 2;
+      teamLifelines = {
+        a: { '5050': false, audience: false, phone: false, skip: false },
+        b: { '5050': false, audience: false, phone: false, skip: false }
+      };
+      showScreen('game');
+      loadTurn();
+    }
+
+    /* ════════════════════════════════════════════
+       SCREEN
+    ════════════════════════════════════════════ */
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-' + id).classList.add('active');
+    }
+
+    /* ════════════════════════════════════════════
+       TURN
+    ════════════════════════════════════════════ */
+    function loadTurn() {
+      if (qIndex >= maxTurns || qIndex >= questionPool.length) { endGame(); return; }
+
+      prizeLevel = Math.min(Math.floor(qIndex / 2), PRIZES.length - 1);
+      currentQ = questionPool[qIndex];
+      answered = false;
+      hiddenOpts = [];
+      timeLeft = TIMER;
+
+      document.getElementById('reveal-zone').innerHTML = '';
+      document.getElementById('next-btn').style.display = 'none';
+      document.getElementById('ll-extra').innerHTML = '';
+
+      const isA = currentTeam === 'a';
+      const aIdx = Math.floor(turnIndex / 2) % teamA.length;
+      const bIdx = Math.floor(turnIndex / 2) % teamB.length;
+      const pIdx = isA ? aIdx : bIdx;
+      const player = isA ? playerScores.a[pIdx] : playerScores.b[pIdx];
+
+      // lifelines apuntan al equipo actual (persisten todo el juego)
+      lifelines = teamLifelines[currentTeam];
+      updateLifelines();
+
+      // scoreboard
+      document.getElementById('pts-a').textContent = '$' + scores.a.toLocaleString();
+      document.getElementById('pts-b').textContent = '$' + scores.b.toLocaleString();
+      document.getElementById('cur-player-a').textContent = 'Jugando: ' + playerScores.a[aIdx].name;
+      document.getElementById('cur-player-b').textContent = 'Jugando: ' + playerScores.b[bIdx].name;
+
+      const sa = document.getElementById('score-a');
+      const sb = document.getElementById('score-b');
+      sa.className = 'score-card card-a' + (isA ? ' active' : '');
+      sb.className = 'score-card card-b' + (!isA ? ' active' : '');
+
+      // turn banner
+      const dot = document.getElementById('turn-dot');
+      dot.style.background = isA ? '#4fc3f7' : '#81c784';
+      dot.style.color = isA ? '#4fc3f7' : '#81c784';
+      dot.style.boxShadow = `0 0 8px ${isA ? '#4fc3f7' : '#81c784'}`;
+      document.getElementById('turn-name').textContent = player.name + (isA ? '  —  Equipo A' : '  —  Equipo B');
+
+      // prize ladder
+      renderLadder();
+
+      // question
+      document.getElementById('q-meta').textContent = `Pregunta ${qIndex + 1}  ·  Premio: $${PRIZES[prizeLevel].toLocaleString()}`;
+      document.getElementById('q-text').textContent = currentQ.q;
+
+      renderOptions();
+      startTimer();
+      stopAll();
+      snd('snd-tema');
+    }
+
+    function renderLadder() {
+      const el = document.getElementById('prize-ladder');
+      el.innerHTML = '';
+      const show = PRIZES.slice(0, Math.min(8, PRIZES.length));
+      show.forEach((p, i) => {
+        const d = document.createElement('div');
+        d.className = 'prize-step' + (i === prizeLevel ? ' current' : i < prizeLevel ? ' passed' : '');
+        d.textContent = p >= 1000000 ? '$1M' : p >= 1000 ? '$' + (p / 1000) + 'K' : '$' + p;
+        el.appendChild(d);
+      });
+    }
+
+    function renderOptions() {
+      const grid = document.getElementById('options');
+      grid.innerHTML = '';
+      currentQ.opts.forEach((o, i) => {
+        const btn = document.createElement('button');
+        const isHidden = hiddenOpts.includes(i);
+        btn.className = 'opt-btn' + (isHidden ? ' hidden-50' : '');
+        btn.disabled = isHidden;
+        btn.innerHTML = `<span class="opt-letter">${LETTERS[i]}.</span>${o}`;
+        if (!isHidden) btn.onclick = () => selectAnswer(i);
+        grid.appendChild(btn);
+      });
+    }
+
+    /* ════════════════════════════════════════════
+       TIMER
+    ════════════════════════════════════════════ */
+    function startTimer() {
+      clearInterval(timerInterval);
+      updateTimerUI();
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerUI();
+        if (timeLeft <= 0) { clearInterval(timerInterval); if (!answered) timeOut(); }
+      }, 1000);
+    }
+
+    function stopTimer() { clearInterval(timerInterval); }
+
+    function updateTimerUI() {
+      const pct = (timeLeft / TIMER) * 100;
+      const fill = document.getElementById('timer-fill');
+      fill.style.width = pct + '%';
+      fill.style.background = pct < 30 ? '#ff1744' : pct < 60 ? '#FF9800' : '#00e676';
+      document.getElementById('timer-text').textContent = timeLeft + 's';
+    }
+
+    /* ════════════════════════════════════════════
+       ANSWER
+    ════════════════════════════════════════════ */
+    function selectAnswer(idx) {
+      if (answered) return;
+      answered = true;
+      stopTimer();
+      disableAllOpts();
+      stopAll();
+      snd('snd-seleccion');
+      // Mark selected with suspense
+      const btns = document.querySelectorAll('.opt-btn');
+      if (btns[idx]) btns[idx].className = 'opt-btn selected';
+      // Suspense timer bar
+      const fill = document.getElementById('timer-fill');
+      fill.style.transition = 'width 1.6s ease, background 0.5s';
+      fill.style.width = '100%';
+      fill.style.background = '#FF9800';
+      setTimeout(() => revealAnswer(idx), 1900);
+    }
+
+    function disableAllOpts() {
+      document.querySelectorAll('.opt-btn').forEach(b => { b.disabled = true; });
+    }
+    /*
+    function revealAnswer(idx) {
+      const btns = document.querySelectorAll('.opt-btn');
+      const correct = currentQ.ans;
+      if (btns[correct]) btns[correct].className = 'opt-btn correct';
+      if (idx !== correct && btns[idx]) btns[idx].className = 'opt-btn wrong';
+    
+      const isA = currentTeam === 'a';
+      const pIdx = Math.floor(turnIndex / 2) % (isA ? teamA.length : teamB.length);
+      const prize = PRIZES[prizeLevel];
+      const zone = document.getElementById('reveal-zone');
+    
+      if (idx === correct) {
+        if (isA) { scores.a += prize; playerScores.a[pIdx].pts += prize; }
+        else { scores.b += prize; playerScores.b[pIdx].pts += prize; }
+        document.getElementById('pts-a').textContent = '$' + scores.a.toLocaleString();
+        document.getElementById('pts-b').textContent = '$' + scores.b.toLocaleString();
+        stopAll();
+        snd('snd-correcto');
+        zone.innerHTML = `<div class="reveal-card correct-reveal">
+          <div class="reveal-icon">✓</div>
+          <div class="reveal-msg">¡Correcto!</div>
+          <div class="reveal-sub">+$${prize.toLocaleString()} para ${isA ? 'Equipo A' : 'Equipo B'}</div>
+        </div>`;
+      } else {
+        stopAll();
+        snd('snd-incorrecto');
+        zone.innerHTML = `<div class="reveal-card wrong-reveal">
+          <div class="reveal-icon">✗</div>
+          <div class="reveal-msg">¡Incorrecto!</div>
+          <div class="reveal-sub">La respuesta correcta era: <strong>${currentQ.opts[correct]}</strong></div>
+        </div>`;
+      }
+      document.getElementById('next-btn').style.display = 'block';
+    }
+    
+    function timeOut() {
+      answered = true;
+      disableAllOpts();
+      stopAll();
+      snd('snd-timeout');
+      const correct = currentQ.ans;
+      const btns = document.querySelectorAll('.opt-btn');
+      if (btns[correct]) btns[correct].className = 'opt-btn correct';
+      document.getElementById('reveal-zone').innerHTML = `<div class="reveal-card timeout-reveal">
+        <div class="reveal-icon">⏱</div>
+        <div class="reveal-msg">¡Tiempo agotado!</div>
+        <div class="reveal-sub">La respuesta correcta era: <strong>${currentQ.opts[correct]}</strong></div>
+      </div>`;
+      document.getElementById('next-btn').style.display = 'block';
+    }*/
+
+    function revealAnswer(idx) {
+      const btns = document.querySelectorAll('.opt-btn');
+      const correct = currentQ.ans;
+      if (btns[correct]) btns[correct].className = 'opt-btn correct';
+      if (idx !== correct && btns[idx]) btns[idx].className = 'opt-btn wrong';
+
+      const isA = currentTeam === 'a';
+      const pIdx = Math.floor(turnIndex / 2) % (isA ? teamA.length : teamB.length);
+      const prize = PRIZES[prizeLevel];
+      const zone = document.getElementById('reveal-zone');
+
+      if (idx === correct) {
+        if (isA) { scores.a += prize; playerScores.a[pIdx].pts += prize; }
+        else { scores.b += prize; playerScores.b[pIdx].pts += prize; }
+        document.getElementById('pts-a').textContent = '$' + scores.a.toLocaleString();
+        document.getElementById('pts-b').textContent = '$' + scores.b.toLocaleString();
+        stopAll();
+        snd('snd-correcto');
+        zone.innerHTML = `<div class="reveal-card correct-reveal">
+      <div class="reveal-icon">✓</div>
+      <div class="reveal-msg">¡Correcto!</div>
+      <div class="reveal-sub">+$${prize.toLocaleString()} para ${isA ? 'Equipo A' : 'Equipo B'}</div>
+      <div class="reveal-exp">${currentQ.exp}</div>
+    </div>`;
+      } else {
+        stopAll();
+        snd('snd-incorrecto');
+        zone.innerHTML = `<div class="reveal-card wrong-reveal">
+      <div class="reveal-icon">✗</div>
+      <div class="reveal-msg">¡Incorrecto!</div>
+      <div class="reveal-sub">La respuesta correcta era: <strong>${currentQ.opts[correct]}</strong></div>
+      <div class="reveal-exp">${currentQ.exp}</div>
+    </div>`;
+      }
+      document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function timeOut() {
+      answered = true;
+      disableAllOpts();
+      stopAll();
+      snd('snd-timeout');
+      const correct = currentQ.ans;
+      const btns = document.querySelectorAll('.opt-btn');
+      if (btns[correct]) btns[correct].className = 'opt-btn correct';
+      document.getElementById('reveal-zone').innerHTML = `<div class="reveal-card timeout-reveal">
+    <div class="reveal-icon">⏱</div>
+    <div class="reveal-msg">¡Tiempo agotado!</div>
+    <div class="reveal-sub">La respuesta correcta era: <strong>${currentQ.opts[correct]}</strong></div>
+    <div class="reveal-exp">${currentQ.exp}</div>
+  </div>`;
+      document.getElementById('next-btn').style.display = 'block';
+    }
+
+    function nextTurn() {
+      qIndex++;
+      if (currentTeam === 'a') { currentTeam = 'b'; }
+      else { currentTeam = 'a'; turnIndex++; }
+      loadTurn();
+    }
+
+    /* ════════════════════════════════════════════
+       LIFELINES
+    ════════════════════════════════════════════ */
+    function updateLifelines() {
+      const isA = currentTeam === 'a';
+      const teamLabel = isA ? 'Equipo A' : 'Equipo B';
+      const set = (id, key, label) => {
+        const btn = document.getElementById(id);
+        const used = lifelines[key];
+        btn.disabled = used || answered;
+        btn.className = 'll-btn' + (used ? ' used' : '');
+        btn.title = used ? `Ya usado por ${teamLabel}` : label;
+      };
+      set('ll-5050', '5050', 'Elimina dos respuestas incorrectas');
+      set('ll-audience', 'audience', 'Votación del equipo');
+      set('ll-phone', 'phone', 'Llamar a un compañero');
+      set('ll-skip', 'skip', 'Pasar esta pregunta');
+    }
+
+    function use5050() {
+      if (lifelines['5050'] || answered) return;
+      lifelines['5050'] = true;
+      updateLifelines();
+      const correct = currentQ.ans;
+      const wrong = [0, 1, 2, 3].filter(i => i !== correct);
+      shuffle(wrong);
+      hiddenOpts = wrong.slice(0, 2);
+      renderOptions();
+    }
+
+    function useAudience() {
+      if (lifelines.audience || answered) return;
+      lifelines.audience = true;
+      updateLifelines();
+      const correct = currentQ.ans;
+      const raw = [0, 1, 2, 3].map(i => i === correct
+        ? Math.floor(42 + Math.random() * 32)
+        : Math.floor(4 + Math.random() * 18));
+      const total = raw.reduce((a, b) => a + b, 0);
+      const pcts = raw.map(v => Math.round(v * 100 / total));
+      document.getElementById('ll-extra').innerHTML = `<div class="ll-extra">
+    <div class="ll-extra-title">Comodín del equipo</div>
+    ${pcts.map((p, i) => `<div class="aud-row">
+      <span class="aud-label">${LETTERS[i]}</span>
+      <div class="aud-track"><div class="aud-fill" style="width:${p}%"></div></div>
+      <span class="aud-pct">${p}%</span>
+    </div>`).join('')}
+  </div>`;
+    }
+
+    function usePhone() {
+      if (lifelines.phone || answered) return;
+      lifelines.phone = true;
+      updateLifelines();
+      const correct = currentQ.ans;
+      const phrases = [
+        `Estoy casi seguro de que es "${currentQ.opts[correct]}"...`,
+        `Mmm, yo diría "${currentQ.opts[correct]}", pero no estoy 100%.`,
+        `La respuesta debería ser "${currentQ.opts[correct]}", confía en mí.`,
+        `Creo que es "${currentQ.opts[correct]}", tiene mucho sentido.`,
+        `"${currentQ.opts[correct]}" — sin dudarlo.`
+      ];
+      const msg = phrases[Math.floor(Math.random() * phrases.length)];
+      document.getElementById('ll-extra').innerHTML = `<div class="ll-extra">
+    <div class="ll-extra-title">📞 Llamada a un amigo</div>
+    <div class="phone-text">"${msg}"</div>
+  </div>`;
+    }
+
+    function useSkip() {
+      if (lifelines.skip || answered) return;
+      lifelines.skip = true;
+      answered = true;
+      stopTimer();
+      disableAllOpts();
+      document.getElementById('reveal-zone').innerHTML = `<div class="reveal-card skip-reveal">
+    <div class="reveal-icon">→</div>
+    <div class="reveal-msg">Pregunta saltada</div>
+    <div class="reveal-sub">Sin puntos en este turno</div>
+  </div>`;
+      document.getElementById('next-btn').style.display = 'block';
+    }
+
+    /* ════════════════════════════════════════════
+       END GAME
+    ════════════════════════════════════════════ */
+    function endGame() {
+      const winner = scores.a > scores.b ? 'a' : scores.b > scores.a ? 'b' : 'tie';
+      let subMsg = winner === 'tie'
+        ? '¡Empate! Ambos equipos lucharon bien.'
+        : `¡${winner === 'a' ? 'Equipo A' : 'Equipo B'} gana el juego!`;
+      document.getElementById('end-sub').textContent = subMsg;
+
+      document.getElementById('end-scores').innerHTML = `
+    <div class="end-team-card ${winner === 'a' ? 'winner' : ''}">
+      <div class="end-team-name">Equipo A</div>
+      <div class="end-team-pts">$${scores.a.toLocaleString()}</div>
+      ${winner === 'a' ? '<span class="winner-badge">🏆 Ganador</span>' : ''}
+    </div>
+    <div class="end-team-card ${winner === 'b' ? 'winner' : ''}">
+      <div class="end-team-name">Equipo B</div>
+      <div class="end-team-pts">$${scores.b.toLocaleString()}</div>
+      ${winner === 'b' ? '<span class="winner-badge">🏆 Ganador</span>' : ''}
+    </div>
+  `;
+
+      const allPlayers = [
+        ...playerScores.a.map(p => ({ ...p, team: 'a' })),
+        ...playerScores.b.map(p => ({ ...p, team: 'b' }))
+      ].sort((a, b) => b.pts - a.pts);
+
+      document.getElementById('end-players').innerHTML = `
+    <div class="end-players-title">Puntuación por jugador</div>
+    ${allPlayers.map(p => `<div class="end-player-row">
+      <div><span class="ep-team t${p.team}">Equipo ${p.team.toUpperCase()}</span><span class="ep-name">${p.name}</span></div>
+      <span class="ep-pts">$${p.pts.toLocaleString()}</span>
+    </div>`).join('')}
+  `;
+
+      stopAll();
+      snd('snd-ganador');
+      showScreen('end');
+    }
+
+    function restartGame() {
+      stopAll();
+      teamA = [];
+      teamB = [];
+      teamLifelines = {
+        a: { '5050': false, audience: false, phone: false, skip: false },
+        b: { '5050': false, audience: false, phone: false, skip: false }
+      };
+      for (let i = 0; i < 7; i++) { teamA.push(''); teamB.push(''); }
+      renderSetup('a');
+      renderSetup('b');
+      showScreen('setup');
+    }
+
+    /* ════════════════════════════════════════════
+       AUDIO
+    ════════════════════════════════════════════ */
+    let muted = false;
+
+    function snd(id) {
+      if (muted) return;
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.currentTime = 0;
+      el.play().catch(() => { });
+    }
+
+    function stopAll() {
+      ['snd-tema', 'snd-seleccion', 'snd-correcto', 'snd-incorrecto', 'snd-timeout', 'snd-ganador']
+        .forEach(id => { const e = document.getElementById(id); if (e) { e.pause(); e.currentTime = 0; } });
+    }
+
+    function toggleMute() {
+      muted = !muted;
+      document.getElementById('mute-btn').textContent = muted ? '🔇' : '🔊';
+      if (muted) stopAll();
+    }
+
+    /* ════════════════════════════════════════════
+       INIT
+    ════════════════════════════════════════════ */
+    for (let i = 0; i < 7; i++) { teamA.push(''); teamB.push(''); }
+    renderSetup('a');
+    renderSetup('b');
+  </script>
+</body>
+
+</html>
