@@ -1,14 +1,20 @@
 {
-    "name": "Devs Millonario",
-    "short_name": "DevsQuiz",
+    "name": "Creando Soft Millonario",
+    "short_name": "Millonario",
     "start_url": "index.html",
     "display": "standalone",
     "background_color": "#0a0e2e",
     "theme_color": "#FFD700",
     "icons": [
         {
-            "src": "https://cdn-icons-png.flaticon.com/512/3135/3135673.png",
+            "src": "/img/pwa-icon-512.png",
             "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/img/pwa-icon-192.png",
+            "sizes": "192x192",
             "type": "image/png",
             "purpose": "any maskable"
         }
