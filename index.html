@@ -54,7 +54,9 @@
       overflow-x: hidden;
     }
 
-    /* Stars background */
+    /* EXPLICACIÓN: Este bloque crea el efecto de luces azules en el fondo 
+     usando gradientes radiales.
+    */
     body::before {
       content: '';
       position: fixed;
@@ -100,7 +102,9 @@
       text-transform: uppercase;
     }
 
-    /* SCREENS */
+    /* EXPLICACIÓN: Las pantallas se ocultan con 'display: none' y solo 
+     se muestran las que tienen la clase '.active'.
+  */
     .screen {
       display: none;
     }
@@ -1136,8 +1140,8 @@
 
   <div class="container">
     <div class="game-header">
-      <h1>¿Quién quiere ser millonario?</h1>
-      <div class="subtitle">Edición equipos</div>
+      <h1>¿Quién quiere ser millonario en Creando Soft?</h1>
+      <div class="subtitle">Edición pausas activas</div>
     </div>
 
     <!-- ══ SETUP SCREEN ══ -->
@@ -1232,6 +1236,7 @@
     /* ════════════════════════════════════════════
        DATA
     ════════════════════════════════════════════ */
+    // EXPLICACIÓN: Valores de los premios en pesos.
     const PRIZES = [100, 200, 500, 1000, 2000, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
     const TIMER = 30;
     const LETTERS = ['A', 'B', 'C', 'D'];
@@ -1308,10 +1313,8 @@
       { q: "¿Qué importante líder indígena luchó contra la colonización española en la región del Cauca?", opts: ["La Gaitana", "Tupac Amaru", "Benkos Biohó", "Atahualpa"], ans: 0, exp: "La Cacica Gaitana lideró una fuerte resistencia en la década de 1530 en represalia por el brutal asesinato de su hijo por los conquistadores." },
       { q: "¿Cómo se llama la cultura precolombina famosa por su compleja orfebrería y el 'Poporo'?", opts: ["San Agustín", "Tierradentro", "Quimbaya", "Zenú"], ans: 2, exp: "La cultura Quimbaya destacó enormemente por su trabajo en tumbaga (aleación de oro y cobre) con una técnica y estética excepcionales." },
       { q: "¿Cuál es el nombre oficial del miedo irracional a las palabras largas?", opts: ["Papirofobia", "Hipopotomonstrosesquipedaliofobia", "Aulofobia", "Pentaterafobia"], ans: 1, exp: "Irónicamente, la palabra para definir el miedo a las palabras largas es una de las más largas del diccionario." },
-      { q: "En el estado de Florida (EE.UU.), ¿qué es ilegal hacerle a un elefante si lo dejas atado a un parquímetro?", opts: ["No darle agua", "No pagar la tarifa del parquímetro", "Pintarlo de rosa", "Llevarlo sin correa"], ans: 1, exp: "Según una ley antigua, si dejas un elefante atado a un parquímetro, debes pagar la tarifa como si fuera un vehículo o podrías ser multado." },
       { q: "¿Cuál de estos animales NO puede saltar?", opts: ["Elefante", "Canguro", "Grillo", "Pulga"], ans: 0, exp: "Debido a su enorme peso y a la estructura de sus huesos, el elefante es el único mamífero que tiene cuatro rodillas pero no puede despegar las cuatro patas del suelo a la vez." },
       { q: "¿Qué inventó accidentalmente el químico John Walker cuando intentaba limpiar una sustancia pegajosa de un palo?", opts: ["El chicle", "El pegamento líquido", "Los fósforos (cerillas)", "La dinamita"], ans: 2, exp: "Al raspar el palo contra el suelo para limpiar la punta, esta se encendió. Así nacieron los fósforos de fricción en 1826." },
-      { q: "¿Cuál era el sabor original del relleno de los pastelitos 'Twinkies' antes de la Segunda Guerra Mundial?", opts: ["Vainilla", "Fresa", "Banana", "Chocolate"], ans: 2, exp: "Originalmente eran de banana, pero debido al racionamiento de frutas durante la guerra, cambiaron a vainilla y así se quedaron por su éxito." },
       { q: "¿Qué animal tiene las huellas dactilares tan parecidas a las humanas que a veces confunden a los forenses en escenas del crimen?", opts: ["Chimpancé", "Koala", "Perro", "Oso"], ans: 1, exp: "Los koalas tienen crestas dactilares tan similares a las nuestras que incluso bajo el microscopio es difícil distinguirlas." },
       { q: "En 2006, un hombre intentó vender ¿qué país? a través de una subasta en eBay.", opts: ["Nueva Zelanda", "Islandia", "Grecia", "Suiza"], ans: 0, exp: "Un ciudadano australiano intentó vender Nueva Zelanda con un precio inicial de 0.01 dólares. La oferta llegó a 3,000 dólares antes de que eBay cerrara la subasta." },
       { q: "¿Cuál fue el primer juguete que se anunció por televisión en la historia?", opts: ["Barbie", "LEGO", "Sr. Cara de Papa (Mr. Potato Head)", "Hot Wheels"], ans: 2, exp: "Fue en 1952. Curiosamente, en esa época el juguete consistía solo en las piezas, y los niños debían usar una papa real de su cocina para armarlo." },
@@ -1355,6 +1358,8 @@
     /* ════════════════════════════════════════════
        STATE
     ════════════════════════════════════════════ */
+
+    // EXPLICACIÓN: Variables globales que guardan el estado de la partida.
     let teamA = [], teamB = [];
     let scores = { a: 0, b: 0 };
     let playerScores = { a: [], b: [] };
@@ -1368,6 +1373,8 @@
     let qIndex = 0;
     let maxTurns = 0;
     let prizeLevel = 0;
+
+    // EXPLICACIÓN: Estado de los comodines. 'false' significa que aún no se han usado.
     let teamLifelines = {
       a: { '5050': false, audience: false, phone: false, skip: false },
       b: { '5050': false, audience: false, phone: false, skip: false }
@@ -1416,6 +1423,9 @@
       renderSetup(team);
     }
 
+    /* EXPLICACIÓN: 'startGame' se ejecuta al pulsar el botón dorado. 
+      Valida que haya jugadores y limpia los datos para empezar de cero.
+    */
     function startGame() {
       const err = document.getElementById('setup-error');
       if (teamA.length < 7 || teamB.length < 7) { err.textContent = 'Cada equipo necesita mínimo 7 jugadores.'; return; }
