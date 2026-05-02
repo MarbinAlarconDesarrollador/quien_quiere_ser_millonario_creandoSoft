@@ -94,16 +94,6 @@
       line-height: 1.2;
     }
 
-    .game-header h2 {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(18px, 4vw, 28px);
-      font-weight: 700;
-      color: var(--gold);
-      text-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 2px 0 rgba(0, 0, 0, 0.5);
-      letter-spacing: 0.04em;
-      line-height: 1.2;
-    }
-
     .game-header .subtitle {
       font-size: 13px;
       color: var(--muted);
@@ -1102,27 +1092,6 @@
     input {
       font-size: 16px !important;
     }
-
-    .game-footer {
-      text-align: center;
-      padding: 20px 0;
-      margin-top: 40px;
-      border-top: 1px solid rgba(255, 215, 0, 0.2);
-      font-family: 'Lato', sans-serif;
-    }
-
-    .game-footer p {
-      font-size: 13px;
-      color: var(--muted);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .game-footer strong {
-      color: var(--gold);
-      font-weight: 700;
-      text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-    }
   </style>
 </head>
 
@@ -1172,8 +1141,6 @@
   <div class="container">
     <div class="game-header">
       <h1>¿Quién quiere ser millonario en Creando Soft?</h1>
-      <h2>Pues por ahora hagan puntos para no pagar el desayuno.</h2>
-
       <div class="subtitle">Edición pausas activas</div>
     </div>
 
@@ -1263,10 +1230,6 @@
         <button class="restart-btn" onclick="restartGame()">Jugar de nuevo</button>
       </div>
     </div>
-
-    <footer class="game-footer">
-      <p>Hecho por <strong>Marbin Alarcón</strong> para <strong>Creando Soft</strong> y su excelente equipo</p>
-    </footer>
   </div>
 
   <script>
@@ -1279,215 +1242,118 @@
     const LETTERS = ['A', 'B', 'C', 'D'];
 
     const ALL_QUESTIONS = [
-
-      // ══════════════════════════════════════════
-      // CULTURA GENERAL — FÁCIL
-      // ══════════════════════════════════════════
-      { q: "¿Cuál es el país más grande del mundo por área?", opts: ["Rusia", "Canadá", "China", "Estados Unidos"], ans: 0, exp: "Rusia abarca más de 17 millones de km², ocupando gran parte de Europa del Este y el norte de Asia." },
+      { q: "¿Cuál es el país más grande del mundo por área?", opts: ["Rusia", "Canadá", "China", "Estados Unidos"], ans: 0, exp: "Rusia abarca más de 17 millones de kilómetros cuadrados, ocupando gran parte de Europa del Este y el norte de Asia." },
       { q: "¿Cuántos lados tiene un hexágono?", opts: ["5", "6", "7", "8"], ans: 1, exp: "El prefijo 'hexa' proviene del griego y significa seis." },
-      { q: "¿Cuál es el océano más grande del mundo?", opts: ["Atlántico", "Índico", "Ártico", "Pacífico"], ans: 3, exp: "El Pacífico cubre más del 30% de la superficie del planeta, superando en tamaño a toda la masa continental de la Tierra junta." },
-      { q: "¿Cuántos huesos tiene el cuerpo humano adulto?", opts: ["196", "206", "216", "226"], ans: 1, exp: "Al nacer tenemos cerca de 300 huesos, pero muchos se fusionan con la edad hasta llegar a 206 en la adultez." },
-      { q: "¿Cuál es la capital de Australia?", opts: ["Sídney", "Melbourne", "Brisbane", "Canberra"], ans: 3, exp: "Canberra fue elegida capital en 1908 como solución de compromiso a la rivalidad entre Sídney y Melbourne." },
-      { q: "¿Cuál es el animal terrestre más rápido?", opts: ["León", "Guepardo", "Caballo", "Leopardo"], ans: 1, exp: "El guepardo puede alcanzar entre 100 y 120 km/h en ráfagas muy cortas, aunque no puede mantener esa velocidad por más de unos segundos." },
-      { q: "¿Quién pintó la Mona Lisa?", opts: ["Miguel Ángel", "Rafael", "Leonardo da Vinci", "Donatello"], ans: 2, exp: "Pintada a principios del siglo XVI por Leonardo da Vinci. Actualmente se exhibe en el Museo del Louvre en París." },
+      { q: "¿Quién escribió 'Cien años de soledad'?", opts: ["Pablo Neruda", "Jorge Luis Borges", "Gabriel García Márquez", "Mario Vargas Llosa"], ans: 2, exp: "Fue publicada en 1967 y es considerada la obra maestra de la literatura hispanoamericana y del realismo mágico." },
+      { q: "¿Cuál es el océano más grande del mundo?", opts: ["Atlántico", "Índico", "Ártico", "Pacífico"], ans: 3, exp: "Cubre más del 30% de la superficie del planeta, superando en tamaño a toda la masa continental de la Tierra junta." },
+      { q: "¿En qué año llegó el hombre a la Luna?", opts: ["1965", "1967", "1969", "1971"], ans: 2, exp: "La misión Apolo 11, con los astronautas Neil Armstrong y Buzz Aldrin, alunizó el 20 de julio de 1969." },
+      { q: "¿Cuál es el elemento más abundante en la corteza terrestre?", opts: ["Silicio", "Hierro", "Aluminio", "Oxígeno"], ans: 3, exp: "El oxígeno representa aproximadamente el 46.6% de la masa de la corteza terrestre." },
+      { q: "¿Cuántos huesos tiene el cuerpo humano adulto?", opts: ["196", "206", "216", "226"], ans: 1, exp: "Al nacer tenemos alrededor de 300 huesos, pero muchos se fusionan a medida que crecemos hasta llegar a 206 en la adultez." },
+      { q: "¿Cuál es la capital de Australia?", opts: ["Sídney", "Melbourne", "Brisbane", "Canberra"], ans: 3, exp: "Fue elegida como capital en 1908 como un compromiso para terminar la rivalidad entre Sídney y Melbourne." },
+      { q: "¿Qué planeta es conocido como el planeta rojo?", opts: ["Venus", "Marte", "Júpiter", "Saturno"], ans: 1, exp: "Su apariencia rojiza se debe a la abundancia de óxido de hierro (óxido) en su superficie." },
+      { q: "¿Cuántos colores tiene el arcoíris?", opts: ["5", "6", "7", "8"], ans: 2, exp: "Tradicionalmente se dividen en 7: rojo, naranja, amarillo, verde, azul, añil y violeta." },
+      { q: "¿Cuál es el río más largo del mundo?", opts: ["Amazonas", "Nilo", "Yangtsé", "Misisipi"], ans: 1, exp: "Aunque ha habido debates recientes que sugieren que el Amazonas podría ser más largo, históricamente y por consenso geográfico mayoritario, el Nilo ostenta el récord." },
+      { q: "¿Quién pintó la Mona Lisa?", opts: ["Miguel Ángel", "Rafael", "Leonardo da Vinci", "Donatello"], ans: 2, exp: "Fue pintada a principios del siglo XVI por el genio renacentista Leonardo da Vinci y se exhibe en el Louvre, París." },
+      { q: "¿Cuál es el animal terrestre más rápido?", opts: ["León", "Guepardo", "Caballo", "Leopardo"], ans: 1, exp: "El guepardo puede alcanzar velocidades de entre 100 y 120 km/h en ráfagas muy cortas." },
       { q: "¿Cuántos planetas tiene el sistema solar?", opts: ["7", "8", "9", "10"], ans: 1, exp: "Desde que Plutón fue reclasificado como 'planeta enano' en 2006, el sistema solar tiene oficialmente 8 planetas." },
-      { q: "¿Cuál es la fórmula química del agua?", opts: ["CO2", "H2O", "NaCl", "O2"], ans: 1, exp: "El agua está compuesta por dos átomos de hidrógeno y uno de oxígeno, unidos por enlaces covalentes." },
-      { q: "¿Cuántos continentes tiene la Tierra?", opts: ["5", "6", "7", "8"], ans: 2, exp: "Los 7 continentes son: África, Antártida, Asia, Europa, América del Norte, América del Sur y Oceanía." },
-      { q: "¿Qué instrumento mide la temperatura?", opts: ["Barómetro", "Termómetro", "Higrómetro", "Anemómetro"], ans: 1, exp: "El termómetro mide la temperatura. El barómetro mide la presión, el higrómetro la humedad y el anemómetro la velocidad del viento." },
-      { q: "¿Cuántos días tiene un año bisiesto?", opts: ["364", "365", "366", "367"], ans: 2, exp: "El año bisiesto tiene 366 días porque se agrega el 29 de febrero para compensar las casi 6 horas extra que tarda la Tierra en completar su órbita." },
-      { q: "¿Cuál es el idioma más hablado en el mundo?", opts: ["Inglés", "Español", "Mandarín", "Hindi"], ans: 2, exp: "El mandarín chino es el idioma con más hablantes nativos, con más de 900 millones de personas. El inglés lidera si se cuentan los hablantes totales incluyendo segunda lengua." },
-      { q: "¿A qué temperatura hierve el agua al nivel del mar?", opts: ["90°C", "95°C", "100°C", "105°C"], ans: 2, exp: "A nivel del mar y bajo presión atmosférica estándar, el agua hierve a exactamente 100°C o 212°F." },
-      { q: "¿Cuántos lados tiene un triángulo?", opts: ["2", "3", "4", "5"], ans: 1, exp: "El triángulo es el polígono con menor número de lados posible. El prefijo 'tri' significa tres en latín." },
-
-      // ══════════════════════════════════════════
-      // CULTURA GENERAL — MEDIO
-      // ══════════════════════════════════════════
-      { q: "¿Cuál es el río más largo del mundo?", opts: ["Amazonas", "Nilo", "Yangtsé", "Misisipi"], ans: 1, exp: "El Nilo, con aproximadamente 6.650 km, es considerado el más largo por consenso geográfico mayoritario, aunque el debate con el Amazonas persiste." },
-      { q: "¿En qué año cayó el Muro de Berlín?", opts: ["1987", "1988", "1989", "1990"], ans: 2, exp: "El Muro de Berlín cayó el 9 de noviembre de 1989, marcando el fin de la Guerra Fría y la posterior reunificación de Alemania en 1990." },
-      { q: "¿Cuál es el metal más abundante en la corteza terrestre?", opts: ["Hierro", "Cobre", "Aluminio", "Oro"], ans: 2, exp: "El aluminio representa alrededor del 8% de la corteza terrestre, siendo el metal más abundante, aunque el elemento más abundante es el oxígeno." },
-      { q: "¿Qué científico formuló la teoría de la relatividad?", opts: ["Isaac Newton", "Nikola Tesla", "Albert Einstein", "Stephen Hawking"], ans: 2, exp: "Albert Einstein publicó la teoría de la relatividad especial en 1905 y la general en 1915, revolucionando la física moderna." },
-      { q: "¿Cuál es la moneda oficial de Japón?", opts: ["Yuan", "Won", "Yen", "Baht"], ans: 2, exp: "El yen japonés (¥) es la tercera moneda de reserva más grande del mundo, después del dólar y el euro." },
-      { q: "¿Qué órgano produce la insulina en el cuerpo humano?", opts: ["Hígado", "Riñón", "Páncreas", "Bazo"], ans: 2, exp: "El páncreas produce insulina en las células beta de los islotes de Langerhans para regular el nivel de glucosa en la sangre." },
-      { q: "¿Cuántos cromosomas tiene una célula humana normal?", opts: ["23", "44", "46", "48"], ans: 2, exp: "Las células humanas tienen 46 cromosomas organizados en 23 pares. Las células sexuales (espermatozoides y óvulos) tienen 23 cromosomas cada una." },
-      { q: "¿Qué gas es el más abundante en la atmósfera terrestre?", opts: ["Oxígeno", "Dióxido de carbono", "Nitrógeno", "Argón"], ans: 2, exp: "El nitrógeno (N₂) compone aproximadamente el 78% de la atmósfera. El oxígeno ocupa el segundo lugar con un 21%." },
-      { q: "¿Cuál es la capital de Canadá?", opts: ["Toronto", "Vancouver", "Montreal", "Ottawa"], ans: 3, exp: "Ottawa, y no Toronto (la más poblada), es la capital de Canadá desde 1857, elegida por la Reina Victoria." },
-      { q: "¿Cuántas cuerdas tiene una guitarra estándar?", opts: ["4", "5", "6", "7"], ans: 2, exp: "Una guitarra acústica o eléctrica estándar tiene 6 cuerdas, afinadas de grave a agudo: Mi, La, Re, Sol, Si, Mi." },
-
-      // ══════════════════════════════════════════
-      // CULTURA GENERAL — DIFÍCIL
-      // ══════════════════════════════════════════
-      { q: "¿Cuál es el país con más fronteras terrestres en el mundo?", opts: ["Rusia", "Brasil", "China", "Alemania"], ans: 2, exp: "China comparte frontera con 14 países: Rusia, Mongolia, Kazajistán, Kirguistán, Tayikistán, Afganistán, Pakistán, India, Nepal, Bután, Myanmar, Laos, Vietnam y Corea del Norte." },
-      { q: "¿Cómo se llama la unidad mínima de información en computación?", opts: ["Byte", "Bit", "Pixel", "Nibble"], ans: 1, exp: "El bit (binary digit) es la unidad mínima de información, con un valor de 0 o 1. Un byte equivale a 8 bits." },
-      { q: "¿Cuál es el nombre del proceso por el que las plantas producen su alimento?", opts: ["Respiración", "Fotosíntesis", "Fermentación", "Osmosis"], ans: 1, exp: "La fotosíntesis convierte dióxido de carbono y agua en glucosa y oxígeno, usando la energía de la luz solar a través de la clorofila." },
-      { q: "¿Qué filósofo griego fue maestro de Alejandro Magno?", opts: ["Sócrates", "Platón", "Aristóteles", "Pitágoras"], ans: 2, exp: "Aristóteles fue preceptor de Alejandro Magno desde los 13 años. La cadena es notable: Sócrates enseñó a Platón, y Platón a Aristóteles." },
-      { q: "¿Cuántos gramos hay en una libra (pound) anglosajona?", opts: ["353.5 g", "453.5 g", "500 g", "553.5 g"], ans: 1, exp: "Una libra equivale a exactamente 453.592 gramos, o aproximadamente 0.454 kilogramos." },
-
-      // ══════════════════════════════════════════
-      // COLOMBIA / LATINOAMÉRICA — FÁCIL
-      // ══════════════════════════════════════════
-      { q: "¿Cuál es la capital de Colombia?", opts: ["Medellín", "Cali", "Bogotá", "Barranquilla"], ans: 2, exp: "Bogotá, oficialmente Bogotá D.C. (Distrito Capital), es la capital y ciudad más grande de Colombia, ubicada a 2.600 metros sobre el nivel del mar." },
-      { q: "¿Quién escribió 'Cien años de soledad'?", opts: ["Pablo Neruda", "Jorge Luis Borges", "Gabriel García Márquez", "Mario Vargas Llosa"], ans: 2, exp: "Publicada en 1967, es considerada la obra cumbre del realismo mágico. García Márquez nació en Aracataca, Colombia, y ganó el Nobel de Literatura en 1982." },
-      { q: "¿De qué país es originario el café que popularizó la marca 'Juan Valdez'?", opts: ["Brasil", "Colombia", "Costa Rica", "Etiopía"], ans: 1, exp: "Juan Valdez es el personaje ficticio creado en 1958 para representar al caficultor colombiano. El café colombiano es reconocido mundialmente por su calidad." },
-      { q: "¿Cuál es la moneda oficial de Colombia?", opts: ["Sol", "Bolívar", "Peso", "Quetzal"], ans: 2, exp: "El peso colombiano (COP) es la moneda oficial de Colombia. Fue introducido en 1837, reemplazando al real español." },
-      { q: "¿Cuál es el río más largo de Colombia?", opts: ["Cauca", "Magdalena", "Meta", "Putumayo"], ans: 1, exp: "El río Magdalena, con 1.528 km, es el río más largo e importante de Colombia. Nace en el macizo colombiano y desemboca en el mar Caribe." },
-      { q: "¿En qué ciudad de Colombia se celebra el famoso Carnaval declarado Patrimonio de la Humanidad?", opts: ["Bogotá", "Cartagena", "Barranquilla", "Manizales"], ans: 2, exp: "El Carnaval de Barranquilla fue declarado Patrimonio Oral e Inmaterial de la Humanidad por la UNESCO en 2003. Es el segundo más importante del mundo después del de Río." },
-      { q: "¿Cuál es el país más grande de América del Sur?", opts: ["Argentina", "Colombia", "Perú", "Brasil"], ans: 3, exp: "Brasil ocupa casi la mitad del territorio de América del Sur, con 8.5 millones de km². Es además el país más grande de habla portuguesa del mundo." },
-      { q: "¿En qué país de Latinoamérica se encuentra Machu Picchu?", opts: ["Ecuador", "Bolivia", "Perú", "Chile"], ans: 2, exp: "Machu Picchu está en los Andes peruanos, a 2.430 metros de altitud. Fue construida por el Imperio Inca alrededor del siglo XV y declarada Maravilla del Mundo Moderno en 2007." },
-      { q: "¿Cuál es el deporte más popular en Colombia?", opts: ["Béisbol", "Ciclismo", "Fútbol", "Baloncesto"], ans: 2, exp: "El fútbol es el deporte rey en Colombia. La Selección Colombia tiene una de las fanbases más apasionadas de Latinoamérica." },
-      { q: "¿Cuál es la ciudad más poblada de América Latina?", opts: ["Buenos Aires", "Bogotá", "Ciudad de México", "São Paulo"], ans: 2, exp: "Ciudad de México, con su área metropolitana de más de 21 millones de habitantes, es la ciudad más poblada de Latinoamérica y una de las más grandes del mundo." },
-
-      // ══════════════════════════════════════════
-      // COLOMBIA / LATINOAMÉRICA — MEDIO
-      // ══════════════════════════════════════════
-      { q: "¿En qué año obtuvo Colombia su independencia de España?", opts: ["1810", "1819", "1821", "1830"], ans: 1, exp: "El 7 de agosto de 1819, la Batalla de Boyacá selló la independencia de Colombia. El 20 de julio de 1810 se considera el inicio del proceso independentista." },
-      { q: "¿Qué colombiano ganó el Tour de Francia en 2019?", opts: ["Nairo Quintana", "Rigoberto Urán", "Egan Bernal", "Miguel Ángel López"], ans: 2, exp: "Egan Bernal se convirtió en 2019 en el primer colombiano y latinoamericano en ganar el Tour de Francia, a los 22 años, siendo además el ganador más joven en 110 años." },
-      { q: "¿Cuál es la flor nacional de Colombia?", opts: ["Rosa", "Orquídea Cattleya trianae", "Girasol", "Lirio"], ans: 1, exp: "La Cattleya trianae, conocida como 'La Flor de Mayo' o 'Christmas Orchid', es la flor nacional de Colombia. Fue declarada así por el botánico José Jerónimo Triana." },
-      { q: "¿En qué país latinoamericano se encuentra el lago navegable más alto del mundo?", opts: ["Colombia", "Ecuador", "Bolivia y Perú", "Chile"], ans: 2, exp: "El lago Titicaca, compartido entre Bolivia y Perú, está a 3.812 metros sobre el nivel del mar. Es el lago navegable de mayor altitud del mundo." },
-      { q: "¿Cuál es la moneda de Brasil?", opts: ["Peso", "Sol", "Real", "Cruzeiro"], ans: 2, exp: "El real brasileño (BRL) es la moneda de Brasil desde 1994, cuando reemplazó al cruzeiro real como parte del Plan Real para combatir la hiperinflación." },
-      { q: "¿Qué país latinoamericano tiene forma de cono en el mapa?", opts: ["Argentina", "Chile", "Uruguay", "Paraguay"], ans: 1, exp: "Chile tiene una geografía única: mide 4.270 km de norte a sur pero solo 177 km de este a oeste en promedio, dándole su característica forma de cono o faja." },
-      { q: "¿Cuál fue el primer país latinoamericano en legalizar el matrimonio igualitario?", opts: ["Colombia", "México", "Argentina", "Uruguay"], ans: 2, exp: "Argentina legalizó el matrimonio igualitario el 15 de julio de 2010, convirtiéndose en el primer país de América Latina y el décimo en el mundo en hacerlo." },
-      { q: "¿De qué país es originaria la cumbia?", opts: ["Cuba", "Colombia", "Panamá", "Venezuela"], ans: 1, exp: "La cumbia es un género musical originario de Colombia, que fusiona elementos indígenas, africanos y españoles. Es el género musical más representativo del país." },
-      { q: "¿Qué pasa si un colombiano te dice 'nos vemos a las 8'?", opts: ["Llegará a las 7:50", "Llegará a las 8 en punto", "Llegará probablemente a las 8:30 o 9:00", "No va a ir"], ans: 2, exp: "La 'hora colombiana' es un fenómeno cultural donde llegar 30 minutos tarde se considera, en muchos contextos informales, como llegar 'a tiempo'." },
-      { q: "¿Cuál es el volcán activo más alto del mundo, ubicado en Ecuador?", opts: ["Cotopaxi", "Chimborazo", "Tungurahua", "Sangay"], ans: 0, exp: "El Cotopaxi, con 5.897 metros, es uno de los volcanes activos más altos del mundo. El Chimborazo es más alto pero está inactivo." },
-
-      // ══════════════════════════════════════════
-      // COLOMBIA / LATINOAMÉRICA — DIFÍCIL
-      // ══════════════════════════════════════════
-      { q: "¿Cómo se llamaba Colombia antes de 1886?", opts: ["Nueva Granada", "Gran Colombia", "Estados Unidos de Colombia", "República de Bogotá"], ans: 2, exp: "Entre 1863 y 1886 el país se llamó 'Estados Unidos de Colombia'. Antes fue la 'Nueva Granada' (1830-1858) y la 'Confederación Granadina' (1858-1863)." },
-      { q: "¿En qué departamento colombiano se encuentra la Sierra Nevada de Santa Marta?", opts: ["Cesar", "Magdalena", "La Guajira", "Todos los anteriores"], ans: 3, exp: "La Sierra Nevada de Santa Marta abarca partes de los departamentos de Magdalena, Cesar y La Guajira. Es la montaña costera más alta del mundo, con 5.775 metros." },
-      { q: "¿Cuál es el único país de Latinoamérica que tiene costas en el Atlántico y el Pacífico, más salida al Caribe?", opts: ["Venezuela", "Honduras", "Colombia", "Costa Rica"], ans: 2, exp: "Colombia es el único país de Latinoamérica que tiene costas en el océano Pacífico, el mar Caribe (Atlántico) y acceso fluvial al Amazonas, gracias a su ubicación estratégica." },
-      { q: "¿Qué escritora chilena es autora de 'La casa de los espíritus'?", opts: ["Gabriela Mistral", "Isabel Allende", "María Luisa Bombal", "Diamela Eltit"], ans: 1, exp: "Isabel Allende publicó 'La casa de los espíritus' en 1982. Es una de las escritoras en español más leídas en el mundo, con más de 74 millones de libros vendidos." },
-      { q: "¿En qué año se fundó la ciudad de Cartagena de Indias?", opts: ["1523", "1533", "1550", "1563"], ans: 1, exp: "Cartagena de Indias fue fundada el 1 de junio de 1533 por el conquistador español Pedro de Heredia. Su centro histórico amurallado es Patrimonio de la Humanidad." },
-
-      // ══════════════════════════════════════════
-      // HISTORIA — FÁCIL
-      // ══════════════════════════════════════════
-      { q: "¿En qué año llegó el hombre a la Luna?", opts: ["1965", "1967", "1969", "1971"], ans: 2, exp: "La misión Apolo 11, con Neil Armstrong y Buzz Aldrin, alunizó el 20 de julio de 1969. Armstrong fue el primero en pisar la superficie lunar." },
-      { q: "¿Quién fue el primer presidente de los Estados Unidos?", opts: ["Abraham Lincoln", "Thomas Jefferson", "George Washington", "Benjamin Franklin"], ans: 2, exp: "George Washington fue el primer presidente de EE.UU. (1789-1797). Es el único que fue elegido por unanimidad del Colegio Electoral, dos veces." },
-      { q: "¿Cuándo comenzó la Segunda Guerra Mundial?", opts: ["1935", "1937", "1939", "1941"], ans: 2, exp: "La Segunda Guerra Mundial comenzó el 1 de septiembre de 1939, cuando Alemania nazi invadió Polonia. Francia y Gran Bretaña declararon la guerra a Alemania dos días después." },
-      { q: "¿Quién fue Simón Bolívar?", opts: ["Pintor venezolano", "Libertador de varios países de Sudamérica", "Rey de España", "Explorador portugués"], ans: 1, exp: "Simón Bolívar (1783-1830) fue el líder militar y político que lideró la independencia de Venezuela, Colombia, Ecuador, Perú y Bolivia, siendo conocido como 'El Libertador'." },
-      { q: "¿Qué civilización construyó las pirámides de Giza?", opts: ["Babilonios", "Romanos", "Griegos", "Egipcios"], ans: 3, exp: "Las pirámides de Giza fueron construidas por los antiguos egipcios alrededor del 2560 a.C. La Gran Pirámide de Keops fue durante más de 3.800 años la estructura más alta del mundo." },
-
-      // ══════════════════════════════════════════
-      // HISTORIA — MEDIO
-      // ══════════════════════════════════════════
-      { q: "¿En qué año cayó el Muro de Berlín?", opts: ["1987", "1988", "1989", "1991"], ans: 2, exp: "El Muro de Berlín cayó el 9 de noviembre de 1989. Fue construido en 1961 y durante 28 años dividió la ciudad en sector occidental (libre) y oriental (soviético)." },
-      { q: "¿Cuál fue el nombre del barco que se hundió en 1912 en su viaje inaugural?", opts: ["Lusitania", "Bismarck", "Titanic", "Olympic"], ans: 2, exp: "El RMS Titanic se hundió el 15 de abril de 1912 tras chocar con un iceberg en el Atlántico Norte. Murieron más de 1.500 de las 2.224 personas a bordo." },
-      { q: "¿Quién fue la primera mujer en ganar el Premio Nobel?", opts: ["Mother Teresa", "Marie Curie", "Rosalind Franklin", "Ada Lovelace"], ans: 1, exp: "Marie Curie ganó el Nobel de Física en 1903 (con su esposo Pierre) y el de Química en 1911. Es la única persona en ganar el Nobel en dos disciplinas científicas distintas." },
-      { q: "¿En qué año terminó la Segunda Guerra Mundial?", opts: ["1943", "1944", "1945", "1946"], ans: 2, exp: "La Segunda Guerra Mundial terminó en 1945: en Europa el 8 de mayo (Día de la Victoria en Europa o V-E Day) y en el Pacífico el 2 de septiembre, tras las bombas atómicas en Japón." },
-      { q: "¿Quién fue el último faraón del Antiguo Egipto?", opts: ["Nefertiti", "Cleopatra VII", "Ramsés II", "Tutankamón"], ans: 1, exp: "Cleopatra VII (69-30 a.C.) fue la última gobernante activa del reino ptolemaico de Egipto. Tras su muerte, Egipto se convirtió en una provincia del Imperio Romano." },
-      { q: "¿Qué evento desencadenó la Primera Guerra Mundial en 1914?", opts: ["Invasión de Polonia", "Asesinato del Archiduque Francisco Fernando", "Hundimiento del Lusitania", "Revolución Rusa"], ans: 1, exp: "El asesinato del Archiduque Francisco Fernando de Austria el 28 de junio de 1914 en Sarajevo, por el nacionalista serbio Gavrilo Princip, fue el detonante de la Primera Guerra Mundial." },
-      { q: "¿Cuántos años duró la Guerra de los Cien Años?", opts: ["100 años", "116 años", "87 años", "132 años"], ans: 1, exp: "La llamada 'Guerra de los Cien Años' duró realmente 116 años (1337-1453), entre el Reino de Francia y el Reino de Inglaterra por el control del trono francés." },
-
-      // ══════════════════════════════════════════
-      // HISTORIA — DIFÍCIL
-      // ══════════════════════════════════════════
-      { q: "¿En qué año se firmó la Magna Carta, considerada uno de los primeros documentos constitucionales de la historia?", opts: ["1066", "1215", "1348", "1453"], ans: 1, exp: "La Magna Carta fue firmada el 15 de junio de 1215 por el rey Juan I de Inglaterra, limitando el poder monárquico absoluto y sentando las bases del Estado de derecho." },
-      { q: "¿Cómo se llamó el primer satélite artificial en orbitar la Tierra, lanzado en 1957?", opts: ["Explorer 1", "Vostok 1", "Sputnik 1", "Luna 1"], ans: 2, exp: "El Sputnik 1, lanzado por la Unión Soviética el 4 de octubre de 1957, fue el primer satélite artificial de la historia. Dio inicio a la carrera espacial entre EEUU y la URSS." },
-      { q: "¿Qué civilización precolombina desarrolló el sistema de escritura llamado 'quipu'?", opts: ["Aztecas", "Mayas", "Incas", "Olmecas"], ans: 2, exp: "Los Incas usaban el quipu (nudo en quechua), un sistema de cuerdas y nudos de colores para registrar datos numéricos y posiblemente narrativos, sin usar escritura fonética." },
-      { q: "¿En qué año Cristóbal Colón llegó a América?", opts: ["1488", "1490", "1492", "1498"], ans: 2, exp: "El 12 de octubre de 1492, Cristóbal Colón llegó a la isla de Guanahaní (actual Bahamas), creyendo haber llegado a las Indias. Hoy ese día se celebra como el Día de la Hispanidad." },
-      { q: "¿Quién fue el líder de la Revolución Cubana que tomó el poder en 1959?", opts: ["Ernesto 'Che' Guevara", "Raúl Castro", "Fidel Castro", "Camilo Cienfuegos"], ans: 2, exp: "Fidel Castro lideró la revolución que derrocó al dictador Fulgencio Batista el 1 de enero de 1959. Gobernó Cuba hasta 2008, siendo uno de los mandatos más largos de la historia." },
-
-      // ══════════════════════════════════════════
-      // CIENCIA — FÁCIL
-      // ══════════════════════════════════════════
-      { q: "¿Cuál es el elemento más abundante en la corteza terrestre?", opts: ["Silicio", "Hierro", "Aluminio", "Oxígeno"], ans: 3, exp: "El oxígeno representa aproximadamente el 46.6% de la masa de la corteza terrestre, principalmente como parte de minerales y rocas silicatadas." },
-      { q: "¿Qué planeta es conocido como el planeta rojo?", opts: ["Venus", "Marte", "Júpiter", "Saturno"], ans: 1, exp: "La superficie de Marte contiene grandes cantidades de óxido de hierro (herrumbre), que le da su característico color rojizo visible desde la Tierra." },
-      { q: "¿Cuántos colores tiene el arcoíris?", opts: ["5", "6", "7", "8"], ans: 2, exp: "Los 7 colores del arcoíris son: rojo, naranja, amarillo, verde, azul, añil y violeta. Son los colores del espectro visible de la luz blanca al refractarse en gotas de agua." },
-      { q: "¿Cuál es el símbolo químico del oro?", opts: ["Go", "Gr", "Au", "Or"], ans: 2, exp: "El símbolo Au proviene del latín 'Aurum'. El oro es el elemento 79 de la tabla periódica y es conocido por su resistencia a la oxidación." },
-      { q: "¿Qué fuerza mantiene a los planetas en órbita alrededor del Sol?", opts: ["Magnetismo", "Electromagnetismo", "Gravedad", "Fricción"], ans: 2, exp: "La gravedad, descrita por Isaac Newton en 1687, es la fuerza de atracción mutua entre cuerpos con masa. Einstein la redefinió como la curvatura del espacio-tiempo." },
-      { q: "¿Cuál es la velocidad de la luz en el vacío?", opts: ["200.000 km/s", "300.000 km/s", "400.000 km/s", "150.000 km/s"], ans: 1, exp: "La luz viaja a 299.792.458 metros por segundo (≈ 300.000 km/s) en el vacío. Es la velocidad límite del universo según la teoría de la relatividad." },
-      { q: "¿Cuántos elementos tiene la tabla periódica actualmente?", opts: ["108", "112", "118", "124"], ans: 2, exp: "La tabla periódica tiene 118 elementos confirmados. El último en ser oficialmente nombrado fue el Oganesón (Og, #118), en 2016." },
-
-      // ══════════════════════════════════════════
-      // CIENCIA — MEDIO
-      // ══════════════════════════════════════════
-      { q: "¿Qué científico formuló la ley de la gravitación universal?", opts: ["Albert Einstein", "Galileo Galilei", "Isaac Newton", "Nikola Tesla"], ans: 2, exp: "Isaac Newton formuló la ley de la gravitación universal en 1687, publicada en su obra 'Principia Mathematica'. Según la leyenda, se inspiró al ver caer una manzana." },
-      { q: "¿Cuántos cromosomas tiene una célula humana normal?", opts: ["23", "44", "46", "48"], ans: 2, exp: "Las células humanas tienen 46 cromosomas (23 pares). Los errores en este número causan condiciones como el síndrome de Down (trisomía 21, que tiene 47 cromosomas)." },
-      { q: "¿Cuál es el hueso más largo del cuerpo humano?", opts: ["Húmero", "Tibia", "Fémur", "Radio"], ans: 2, exp: "El fémur, o hueso del muslo, es el más largo, fuerte y pesado del cuerpo humano. Puede soportar una fuerza equivalente a 30 veces el peso del cuerpo." },
-      { q: "¿Qué partícula subatómica tiene carga negativa?", opts: ["Protón", "Neutrón", "Electrón", "Fotón"], ans: 2, exp: "El electrón tiene carga negativa (-1). El protón tiene carga positiva (+1) y el neutrón no tiene carga. Los tres son los componentes principales del átomo." },
-      { q: "¿Cómo se llama el proceso por el que los líquidos se convierten en gas?", opts: ["Condensación", "Solidificación", "Evaporación", "Sublimación"], ans: 2, exp: "La evaporación ocurre cuando las moléculas de un líquido adquieren suficiente energía para escapar a la fase gaseosa. La sublimación es el paso directo de sólido a gas." },
-      { q: "¿Cuántos litros de sangre tiene en promedio el cuerpo humano adulto?", opts: ["3-4 litros", "4-5 litros", "5-6 litros", "7-8 litros"], ans: 2, exp: "Un adulto tiene entre 4.7 y 5.5 litros de sangre en promedio (alrededor del 7-8% del peso corporal). La sangre es un tejido líquido compuesto por plasma, glóbulos rojos, blancos y plaquetas." },
-      { q: "¿Qué vitamina produce el cuerpo humano al exponerse a la luz solar?", opts: ["Vitamina A", "Vitamina B12", "Vitamina C", "Vitamina D"], ans: 3, exp: "La vitamina D se sintetiza en la piel cuando se expone a la radiación ultravioleta B (UVB) del sol. Es esencial para la absorción de calcio y la salud ósea." },
-      { q: "¿Cuál es el planeta más grande del sistema solar?", opts: ["Saturno", "Neptuno", "Júpiter", "Urano"], ans: 2, exp: "Júpiter es el planeta más grande, con un diámetro de 143.000 km. Su masa es más del doble de la de todos los demás planetas juntos. Su Gran Mancha Roja es una tormenta que lleva siglos activa." },
-
-      // ══════════════════════════════════════════
-      // CIENCIA — DIFÍCIL
-      // ══════════════════════════════════════════
-      { q: "¿Qué científico propuso la teoría de la evolución por selección natural?", opts: ["Gregor Mendel", "Louis Pasteur", "Charles Darwin", "Alfred Wallace"], ans: 2, exp: "Charles Darwin publicó 'El origen de las especies' en 1859. Alfred Wallace llegó independientemente a conclusiones similares, motivando a Darwin a publicar su teoría." },
-      { q: "¿Cuál es la unidad de medida de la resistencia eléctrica?", opts: ["Voltio", "Amperio", "Vatio", "Ohmio"], ans: 3, exp: "El ohmio (Ω), en honor al físico Georg Simon Ohm, es la unidad de resistencia eléctrica en el Sistema Internacional. La ley de Ohm establece que V = I × R." },
-      { q: "¿Cómo se llama la capa de la atmósfera donde vuelan los aviones comerciales?", opts: ["Troposfera", "Estratosfera", "Mesosfera", "Termosfera"], ans: 1, exp: "Los aviones comerciales vuelan en la estratosfera baja (entre 10.000 y 12.000 metros). La troposfera es la capa más baja donde ocurre el clima que experimentamos en la superficie." },
-      { q: "¿Cuántos pares de nervios craneales tiene el ser humano?", opts: ["10", "12", "14", "16"], ans: 1, exp: "El ser humano tiene 12 pares de nervios craneales que emergen directamente del encéfalo. Controlan funciones como la visión, el olfato, el gusto, el movimiento facial y otros sentidos." },
-      { q: "¿Qué es el ADN?", opts: ["Una proteína que transporta oxígeno", "La molécula que almacena la información genética", "Un tipo de lípido en la membrana celular", "Una enzima digestiva"], ans: 1, exp: "El ADN (Ácido Desoxirribonucleico) es la molécula que contiene las instrucciones genéticas de todos los organismos vivos y muchos virus. Su estructura de doble hélice fue descrita por Watson y Crick en 1953." },
-
-      // ══════════════════════════════════════════
-      // ENTRETENIMIENTO / POP CULTURE — FÁCIL
-      // ══════════════════════════════════════════
-      { q: "¿En qué película animada aparece el personaje Simba?", opts: ["Dumbo", "Bambi", "El Rey León", "La Sirenita"], ans: 2, exp: "'El Rey León' (1994) es una de las películas animadas más exitosas de Disney, inspirada en la obra 'Hamlet' de Shakespeare. La canción 'El Círculo de la Vida' es icónica." },
-      { q: "¿Cómo se llama la saga de películas sobre magos con el personaje Harry Potter?", opts: ["El Señor de los Anillos", "Harry Potter", "Narnia", "Eragon"], ans: 1, exp: "La saga de Harry Potter, creada por J.K. Rowling, consta de 7 libros y 8 películas. Rowling concibió la historia en un tren entre Manchester y Londres en 1990." },
-      { q: "¿Qué famosa serie de televisión está ambientada en los reinos de Westeros y Essos?", opts: ["The Witcher", "Juego de Tronos", "Vikingos", "Merlín"], ans: 1, exp: "'Juego de Tronos' (2011-2019) fue la serie más vista de la historia de HBO, basada en los libros 'Canción de Hielo y Fuego' de George R.R. Martin." },
-      { q: "¿Quién canta 'Despacito'?", opts: ["Daddy Yankee", "Maluma", "Luis Fonsi ft. Daddy Yankee", "J Balvin"], ans: 2, exp: "'Despacito' (2017) de Luis Fonsi con Daddy Yankee fue la primera canción en español en alcanzar el número 1 en el Billboard Hot 100 en 25 años y rompió múltiples récords en YouTube." },
-      { q: "¿En qué año se lanzó el primer iPhone?", opts: ["2005", "2006", "2007", "2008"], ans: 2, exp: "Steve Jobs presentó el primer iPhone el 9 de enero de 2007. Revolutionó la industria de los teléfonos móviles al combinar teléfono, iPod y navegador de internet en un solo dispositivo." },
-      { q: "¿Cómo se llama el personaje principal de la saga 'El Señor de los Anillos'?", opts: ["Gandalf", "Aragorn", "Frodo Bolsón", "Samwise Gamgee"], ans: 2, exp: "Frodo Bolsón es el hobbit protagonista encargado de destruir el Anillo Único en los fuegos del Monte del Destino. La saga fue escrita por J.R.R. Tolkien." },
-
-      // ══════════════════════════════════════════
-      // ENTRETENIMIENTO / POP CULTURE — MEDIO
-      // ══════════════════════════════════════════
-      { q: "¿Qué artista colombiano es conocido como 'El Gato Negro' del vallenato?", opts: ["Carlos Vives", "Diomedes Díaz", "Jorge Celedón", "Silvestre Dangond"], ans: 1, exp: "Diomedes Díaz (1957-2013), conocido como 'El Cacique de La Junta', es la figura más icónica del vallenato colombiano, con una carrera de más de 30 años y millones de fanáticos." },
-      { q: "¿En qué película aparece la frase '¿No me llames Shirley'?", opts: ["Aeropuerto 77", "Los caballeros las prefieren rubias", "Aterriza como puedas", "Loca Academia de Policía"], ans: 2, exp: "Esta célebre frase del humor absurdo pertenece a la comedia 'Aterriza como puedas' (Airplane!, 1980). El malentendido entre 'Surely' (seguramente) y 'Shirley' es uno de los gags más famosos del cine." },
-      { q: "¿Cuántas temporadas tiene la serie 'Breaking Bad'?", opts: ["4", "5", "6", "7"], ans: 1, exp: "'Breaking Bad' (2008-2013) de Vince Gilligan tuvo 5 temporadas y 62 episodios. Es considerada una de las mejores series de la historia de la televisión." },
-      { q: "¿Qué cantante colombiana interpretó 'Hips Don't Lie'?", opts: ["Karol G", "Maluma", "Shakira", "J Balvin"], ans: 2, exp: "Shakira lanzó 'Hips Don't Lie' en 2006 con Wyclef Jean. Fue uno de los sencillos más vendidos en la historia de la música y la catapultó al estrellato mundial definitivo." },
-      { q: "¿Qué personaje de Marvel es conocido como 'el hombre de hierro'?", opts: ["Thor", "Capitán América", "Iron Man / Tony Stark", "Black Panther"], ans: 2, exp: "Tony Stark, interpretado por Robert Downey Jr., es Iron Man. Su primera película de 2008 marcó el inicio del Universo Cinematográfico de Marvel (MCU), la saga de cine más taquillera de la historia." },
-      { q: "¿En qué país se origina el género musical 'K-pop'?", opts: ["China", "Japón", "Corea del Sur", "Tailandia"], ans: 2, exp: "El K-pop (Korean pop) se originó en Corea del Sur en los años 90. Grupos como BTS y BLACKPINK lo llevaron a nivel global. BTS fue el primer grupo coreano en alcanzar el número 1 en el Billboard." },
-      { q: "¿Cuántas canciones tiene el álbum 'Thriller' de Michael Jackson?", opts: ["7", "8", "9", "10"], ans: 2, exp: "'Thriller' (1982) tiene 9 canciones. Es el álbum más vendido de la historia con más de 70 millones de copias. El video de 'Thriller' revolucionó el formato del videoclip musical." },
-
-      // ══════════════════════════════════════════
-      // ENTRETENIMIENTO / POP CULTURE — DIFÍCIL
-      // ══════════════════════════════════════════
-      { q: "¿Cuál es el videojuego más vendido de la historia?", opts: ["Tetris", "Minecraft", "GTA V", "Wii Sports"], ans: 1, exp: "Minecraft supera los 238 millones de copias vendidas en todas las plataformas, siendo el juego más vendido de la historia. Fue comprado por Microsoft en 2014 por 2.500 millones de dólares." },
-      { q: "¿Qué artista tiene más Grammys ganados en la historia?", opts: ["Michael Jackson", "Beyoncé", "Georg Solti", "Paul McCartney"], ans: 2, exp: "El director de orquesta Georg Solti tiene 31 Grammys, el récord histórico. Entre los artistas pop, Beyoncé lidera con más de 30 premios. Los récords cambian frecuentemente en cada ceremonia." },
-      { q: "¿En qué año se estrenó la primera película de Star Wars?", opts: ["1975", "1977", "1979", "1980"], ans: 1, exp: "Star Wars: Episodio IV - Una nueva esperanza se estrenó el 25 de mayo de 1977. George Lucas la creó con un presupuesto de 11 millones de dólares y recaudó más de 775 millones." },
-      { q: "¿Cómo se llama el actor que interpretó a Jack Sparrow en 'Piratas del Caribe'?", opts: ["Orlando Bloom", "Brad Pitt", "Johnny Depp", "Tom Hanks"], ans: 2, exp: "Johnny Depp dio vida al Capitán Jack Sparrow desde 2003. El personaje fue nominado al Oscar (raro para un papel cómico) y se convirtió en uno de los más icónicos del cine moderno." },
-      { q: "¿Cuál es el nombre del universo ficticio donde se desarrolla la saga 'Dune'?", opts: ["Warhammer", "Imperium", "El Universo Conocido", "La Fundación"], ans: 2, exp: "'Dune' de Frank Herbert (1965) se desarrolla en 'El Universo Conocido' unos 20.000 años en el futuro. Es una de las novelas de ciencia ficción más influyentes y vendidas de la historia." },
-
-      // ══════════════════════════════════════════
-      // TECNOLOGÍA / PROGRAMACIÓN — FÁCIL
-      // ══════════════════════════════════════════
-      { q: "¿Cuántos bits tiene un byte?", opts: ["4", "8", "16", "32"], ans: 1, exp: "Un byte equivale a 8 bits. Esta unidad es la base del almacenamiento digital. Un kilobyte (KB) son 1.024 bytes, un megabyte (MB) son 1.024 KB, y así sucesivamente." },
-      { q: "¿Qué significa 'WWW' en la dirección de un sitio web?", opts: ["World Wide Web", "World Web Wireless", "Wide World Web", "Web World Wide"], ans: 0, exp: "WWW significa World Wide Web (Red Mundial). Fue inventada por Tim Berners-Lee en 1989 en el CERN. La web no es lo mismo que internet; es un servicio que funciona sobre internet." },
-      { q: "¿Cuál es el lenguaje de programación más popular para desarrollo web del lado del cliente?", opts: ["Python", "Java", "JavaScript", "C++"], ans: 2, exp: "JavaScript es el único lenguaje que los navegadores web ejecutan de forma nativa. Desde Node.js también se usa en el servidor. Es el lenguaje más usado del mundo según encuestas de Stack Overflow." },
-      { q: "¿Qué empresa creó el sistema operativo Android?", opts: ["Apple", "Microsoft", "Google", "Samsung"], ans: 2, exp: "Android fue desarrollado por Android Inc., pero Google lo adquirió en 2005. Hoy, Android es el sistema operativo móvil más usado del mundo con más del 70% de cuota de mercado." },
-      { q: "¿Qué significa 'CPU'?", opts: ["Compute Processing Unit", "Central Processing Unit", "Core Processor Unit", "Computer Power Unit"], ans: 1, exp: "CPU son las siglas de Central Processing Unit (Unidad Central de Procesamiento), el 'cerebro' del computador. Ejecuta las instrucciones de los programas y coordina todos los demás componentes." },
-      { q: "¿Cuál es la red social más usada en el mundo?", opts: ["Instagram", "TikTok", "Facebook", "X (Twitter)"], ans: 2, exp: "Facebook, con más de 3.000 millones de usuarios activos mensuales, sigue siendo la red social más grande del mundo, aunque pierde popularidad entre los jóvenes frente a TikTok e Instagram." },
-
-      // ══════════════════════════════════════════
-      // TECNOLOGÍA / PROGRAMACIÓN — MEDIO
-      // ══════════════════════════════════════════
-      { q: "¿Qué animal fue el primer 'Bug' real de la historia, hallado dentro de una computadora Mark II en 1947?", opts: ["Una cucaracha", "Una polilla", "Una araña", "Un ratón"], ans: 1, exp: "Grace Hopper halló una polilla atrapada en un relé de la computadora. La pegó en el diario de bitácora con la nota: 'Primer caso real de bug siendo hallado'. De ahí viene el término 'bug' en programación." },
-      { q: "¿Cuál fue el primer dominio registrado en la historia de Internet (marzo de 1985)?", opts: ["apple.com", "google.com", "symbolics.com", "microsoft.com"], ans: 2, exp: "Symbolics.com fue el primer dominio registrado el 15 de marzo de 1985. Era una empresa de computadoras especializada en máquinas Lisp. Hoy el dominio es un sitio histórico de internet." },
-      { q: "¿Qué significa 'HTML'?", opts: ["Hyper Text Markup Language", "High Text Machine Language", "Hyper Transfer Markup Language", "Home Tool Markup Language"], ans: 0, exp: "HTML (HyperText Markup Language) es el lenguaje estándar para crear páginas web. Junto a CSS y JavaScript, forma la tríada fundamental del desarrollo web front-end." },
-      { q: "¿Qué empresa creó el lenguaje de programación Python?", opts: ["Microsoft", "Google", "Sun Microsystems", "Ninguna — fue creado por Guido van Rossum"], ans: 3, exp: "Python fue creado por el programador holandés Guido van Rossum y lanzado en 1991. El nombre no viene de la serpiente, sino del grupo de comedia 'Monty Python'." },
-      { q: "¿Qué significa el término 'Open Source'?", opts: ["Software de pago", "Software cuyo código fuente es público y modificable", "Software solo para empresas", "Software sin actualizaciones"], ans: 1, exp: "Open Source (Código Abierto) significa que el código fuente del software es público, puede ser estudiado, modificado y distribuido libremente. Linux, Firefox y Python son ejemplos célebres." },
-      { q: "¿Cuántos valores posibles tiene un bit?", opts: ["1", "2", "8", "16"], ans: 1, exp: "Un bit solo puede tener dos valores: 0 o 1 (apagado o encendido). Esta dualidad es la base del sistema binario sobre el que funciona toda la computación digital." },
-      { q: "¿Qué es un algoritmo?", opts: ["Un tipo de virus informático", "Un conjunto de instrucciones para resolver un problema", "Un lenguaje de programación", "Una base de datos"], ans: 1, exp: "Un algoritmo es una secuencia finita y ordenada de pasos para resolver un problema. El nombre proviene del matemático persa Al-Juarismi, cuya latinización fue 'Algoritmi'." },
-      { q: "¿Cómo se llama la 'ley' que dice que el desarrollo de software siempre tarda más de lo esperado, incluso cuando se tiene en cuenta esta ley?", opts: ["Ley de Moore", "Ley de Murphy", "Ley de Hofstadter", "Ley de Brooks"], ans: 2, exp: "La Ley de Hofstadter dice: 'Todo lleva más tiempo de lo que esperas, incluso cuando tienes en cuenta la Ley de Hofstadter'. Es una referencia recursiva perfecta." },
-
-      // ══════════════════════════════════════════
-      // TECNOLOGÍA / PROGRAMACIÓN — DIFÍCIL
-      // ══════════════════════════════════════════
-      { q: "¿En qué año se fundó Google?", opts: ["1996", "1997", "1998", "2000"], ans: 2, exp: "Google fue fundada el 4 de septiembre de 1998 por Larry Page y Sergey Brin, estudiantes de doctorado en Stanford. El nombre es un juego de palabras con 'googol', el número 10 elevado a la 100." },
-      { q: "¿Qué significa 'SQL'?", opts: ["Structured Query Language", "Simple Question Language", "Server Query Logic", "Standard Query Link"], ans: 0, exp: "SQL (Structured Query Language) es el lenguaje estándar para gestionar bases de datos relacionales. Fue desarrollado por IBM en los años 70 y es aún uno de los lenguajes más usados en el mundo." },
-      { q: "¿Cuál es el nombre del lenguaje de programación creado en solo 10 días por el cofundador de Netscape?", opts: ["PHP", "JavaScript", "Ruby", "TypeScript"], ans: 1, exp: "Brendan Eich creó JavaScript en mayo de 1995 en solo 10 días de trabajo. Eso explica algunas de sus famosas 'peculiaridades', como que typeof null === 'object' o que 0.1 + 0.2 ≠ 0.3." },
-      { q: "¿Qué protocolo se usa para enviar correos electrónicos?", opts: ["HTTP", "FTP", "SMTP", "SSH"], ans: 2, exp: "SMTP (Simple Mail Transfer Protocol) es el protocolo estándar para el envío de correos. Para recibirlos se usan IMAP o POP3. HTTP es para la web y FTP para transferir archivos." },
-      { q: "¿Cuál de estos NO es un nombre real de una vulnerabilidad informática famosa?", opts: ["Heartbleed", "Shellshock", "Meltdown", "BlueScreenOfDeath"], ans: 3, exp: "Heartbleed (2014), Shellshock (2014) y Meltdown (2018) son vulnerabilidades reales de gran impacto. La 'Blue Screen of Death' (BSOD) es una pantalla de error de Windows, no un exploit." },
-      { q: "¿En qué lenguaje está escrito el núcleo (kernel) de Linux?", opts: ["Python", "Java", "C", "C++"], ans: 2, exp: "El kernel de Linux, creado por Linus Torvalds en 1991, está escrito principalmente en C, con algunas partes en ensamblador. C fue elegido por su control directo sobre el hardware y su eficiencia." },
-      { q: "¿Qué significa el código de error HTTP 404?", opts: ["Servidor no disponible", "Acceso denegado", "Recurso no encontrado", "Solicitud incorrecta"], ans: 2, exp: "El error 404 significa que el servidor no pudo encontrar el recurso solicitado. El 400 es solicitud incorrecta, el 403 es acceso prohibido y el 500 es error interno del servidor." },
-      { q: "¿Qué es el 'refactoring' en programación?", opts: ["Eliminar código antiguo", "Mejorar la estructura interna del código sin cambiar su comportamiento externo", "Agregar nuevas funciones al software", "Hacer una copia de seguridad del código"], ans: 1, exp: "El refactoring consiste en reestructurar el código existente para mejorar su legibilidad, mantenibilidad y rendimiento, sin modificar lo que hace. Es una práctica fundamental en el desarrollo ágil." },
-      { q: "¿Qué empresa desarrolló el lenguaje de programación Swift?", opts: ["Google", "Microsoft", "Apple", "Meta"], ans: 2, exp: "Apple presentó Swift en 2014 como reemplazo de Objective-C para desarrollar apps en iOS y macOS. Es un lenguaje moderno, seguro y con tipado estático, diseñado para ser fácil de aprender." },
-      { q: "¿Cuántos valores posibles puede representar un byte?", opts: ["128", "256", "512", "1024"], ans: 1, exp: "Un byte tiene 8 bits, y cada bit puede ser 0 o 1. Por lo tanto, 2⁸ = 256 valores posibles (del 0 al 255). Los colores RGB usan 1 byte por canal, lo que da 256 niveles de rojo, verde y azul." }
+      { q: "¿En qué continente se encuentra Egipto?", opts: ["Asia", "Europa", "América", "África"], ans: 3, exp: "Se encuentra en el extremo noreste de África, aunque la península del Sinaí sirve como puente terrestre hacia Asia." },
+      { q: "¿Cuál es la fórmula química del agua?", opts: ["CO2", "H2O", "NaCl", "O2"], ans: 1, exp: "Está compuesta por dos átomos de hidrógeno y un átomo de oxígeno." },
+      { q: "¿Quién fue el primer presidente de Estados Unidos?", opts: ["Abraham Lincoln", "Thomas Jefferson", "George Washington", "John Adams"], ans: 2, exp: "Asumió el cargo en 1789 después de liderar las fuerzas estadounidenses hacia la victoria en la Guerra de Independencia." },
+      { q: "¿Cuántos segundos hay en una hora?", opts: ["360", "600", "3600", "36000"], ans: 2, exp: "Una hora tiene 60 minutos, y cada minuto tiene 60 segundos (60 x 60 = 3600)." },
+      { q: "¿Cuál es el idioma más hablado en el mundo?", opts: ["Inglés", "Español", "Mandarín", "Hindi"], ans: 2, exp: "Considerando únicamente hablantes nativos (primera lengua), el chino mandarín es el más hablado." },
+      { q: "¿Cuál es la montaña más alta del mundo?", opts: ["K2", "Kangchenjunga", "Everest", "Lhotse"], ans: 2, exp: "Se eleva a unos 8,848 metros sobre el nivel del mar en la cordillera del Himalaya." },
+      { q: "¿Cuántos jugadores hay en un equipo de fútbol?", opts: ["9", "10", "11", "12"], ans: 2, exp: "Cada equipo entra al campo con 11 jugadores: un portero y 10 jugadores de campo." },
+      { q: "¿Cuál es el metal más conductor de electricidad?", opts: ["Oro", "Cobre", "Plata", "Aluminio"], ans: 2, exp: "Aunque el cobre y el oro son excelentes (y más baratos/resistentes), la plata pura tiene la mayor conductividad eléctrica y térmica." },
+      { q: "¿En qué año se firmó la Declaración de Independencia de EE.UU.?", opts: ["1774", "1776", "1778", "1780"], ans: 1, exp: "Fue adoptada el 4 de julio de 1776, proclamando la separación de las trece colonias británicas." },
+      { q: "¿Cuál es el país con más población del mundo?", opts: ["India", "China", "Estados Unidos", "Indonesia"], ans: 0, exp: "A mediados de 2023, estimaciones de la ONU confirmaron que India superó oficialmente a China como el país más poblado." },
+      { q: "¿Qué científico propuso la teoría de la relatividad?", opts: ["Newton", "Darwin", "Einstein", "Hawking"], ans: 2, exp: "Albert Einstein publicó la Teoría de la Relatividad Especial en 1905 y la General en 1915." },
+      { q: "¿Cuántos continentes hay en el mundo?", opts: ["5", "6", "7", "8"], ans: 2, exp: "En el modelo geográfico más extendido internacionalmente se cuentan 7: Norteamérica, Suramérica, Europa, Asia, África, Oceanía y Antártida." },
+      { q: "¿Cuál es el instrumento de cuerdas más grande de la orquesta?", opts: ["Violín", "Viola", "Cello", "Contrabajo"], ans: 3, exp: "Es el instrumento de arco de mayores dimensiones y el que produce los sonidos más graves en la orquesta sinfónica." },
+      { q: "¿En qué país se inventó el papel?", opts: ["Japón", "Egipto", "China", "India"], ans: 2, exp: "Tradicionalmente se atribuye su invención a Cai Lun en China, alrededor del año 105 d.C." },
+      { q: "¿Cuántos gramos hay en un kilogramo?", opts: ["10", "100", "1000", "10000"], ans: 2, exp: "El prefijo 'kilo' en el Sistema Internacional de Unidades significa exactamente mil." },
+      { q: "¿Cuál es la capital de Japón?", opts: ["Osaka", "Kioto", "Tokio", "Hiroshima"], ans: 2, exp: "Tokio, anteriormente conocida como Edo, se convirtió en la capital de Japón en el año 1868." },
+      { q: "¿Quién escribió 'Don Quijote de la Mancha'?", opts: ["Lope de Vega", "Francisco de Quevedo", "Miguel de Cervantes", "Calderón de la Barca"], ans: 2, exp: "Publicada a inicios de 1605, es considerada por muchos como la primera novela moderna de la historia." },
+      { q: "¿Cuántos cromosomas tiene una célula humana normal?", opts: ["23", "44", "46", "48"], ans: 2, exp: "Tienen 23 pares, lo que da un total de 46 cromosomas que contienen nuestro ADN." },
+      { q: "¿Cuál es el gas más abundante en la atmósfera terrestre?", opts: ["Oxígeno", "Argón", "Dióxido de carbono", "Nitrógeno"], ans: 3, exp: "El nitrógeno compone casi el 78% del aire que respiramos, frente al 21% del oxígeno." },
+      { q: "¿En qué año cayó el Muro de Berlín?", opts: ["1987", "1988", "1989", "1990"], ans: 2, exp: "La noche del 9 al 10 de noviembre de 1989 se abrieron las fronteras, simbolizando el inminente fin de la Guerra Fría." },
+      { q: "¿Cuál es el hueso más largo del cuerpo humano?", opts: ["Tibia", "Fémur", "Radio", "Húmero"], ans: 1, exp: "Es el hueso del muslo, y no solo es el más largo sino también el más fuerte y voluminoso del esqueleto humano." },
+      { q: "¿Cuántas notas musicales hay en la escala diatónica?", opts: ["5", "6", "7", "8"], ans: 2, exp: "Son siete notas naturales: Do, Re, Mi, Fa, Sol, La, Si." },
+      { q: "¿Cuál es el lago más profundo del mundo?", opts: ["Lago Superior", "Lago Victoria", "Lago Baikal", "Mar Caspio"], ans: 2, exp: "El lago Baikal, situado en Siberia (Rusia), alcanza una profundidad máxima de más de 1,640 metros." },
+      { q: "¿Qué planeta tiene los anillos más visibles?", opts: ["Júpiter", "Saturno", "Urano", "Neptuno"], ans: 1, exp: "El sistema de anillos de Saturno es el más espectacular, compuesto principalmente de innumerables partículas de hielo y roca." },
+      { q: "¿Cuál es la moneda de Japón?", opts: ["Yuan", "Won", "Yen", "Baht"], ans: 2, exp: "El yen japonés fue adoptado oficialmente en el año 1871." },
+      { q: "¿Cuántos lados tiene un triángulo?", opts: ["2", "3", "4", "5"], ans: 1, exp: "La palabra proviene del latín 'triangulus', que se refiere a una figura geométrica de tres ángulos y, por ende, tres lados." },
+      { q: "¿Qué país tiene forma de bota?", opts: ["España", "Grecia", "Portugal", "Italia"], ans: 3, exp: "La península itálica tiene una inconfundible forma de bota, en la que la 'punta' parece estar pateando a la isla de Sicilia." },
+      { q: "¿Cuántos dientes permanentes tiene un adulto?", opts: ["28", "30", "32", "34"], ans: 2, exp: "Un adulto sano desarrolla un total de 32 dientes, incluyendo las cuatro muelas del juicio." },
+      { q: "¿Quién compuso 'La novena sinfonía'?", opts: ["Mozart", "Bach", "Beethoven", "Chopin"], ans: 2, exp: "Ludwig van Beethoven la completó en 1824 estando ya completamente sordo. Incluye la célebre 'Oda a la Alegría'." },
+      { q: "¿Cuántos litros tiene un galón americano?", opts: ["2.78", "3.78", "4.78", "5.78"], ans: 1, exp: "Un galón líquido estadounidense equivale exactamente a 3.78541 litros." },
+      { q: "¿En qué país nació el fútbol moderno?", opts: ["Francia", "España", "Brasil", "Inglaterra"], ans: 3, exp: "Las primeras reglas modernas (Las Reglas de Cambridge y luego las de la Football Association) se redactaron en Inglaterra en 1863." },
+      { q: "¿Cuál es el planeta más grande del sistema solar?", opts: ["Saturno", "Neptuno", "Júpiter", "Urano"], ans: 2, exp: "Es un gigante gaseoso cuya masa es más de 300 veces mayor que la de nuestro planeta Tierra." },
+      { q: "¿Cuál es la velocidad de la luz en km/s aproximadamente?", opts: ["100.000", "200.000", "300.000", "400.000"], ans: 2, exp: "En el vacío, la luz viaja a exactamente 299,792 kilómetros por segundo (se redondea a 300,000)." },
+      { q: "¿Cuántos estados tiene México?", opts: ["28", "30", "31", "32"], ans: 3, exp: "Oficialmente, México está compuesto por 31 estados libres y soberanos, más la Ciudad de México, sumando 32 entidades federativas." },
+      { q: "¿Cuál es el animal más grande del mundo?", opts: ["Elefante africano", "Ballena jorobada", "Ballena azul", "Tiburón ballena"], ans: 2, exp: "La ballena azul es el animal conocido más grande que jamás haya existido, pudiendo alcanzar los 30 metros de largo y pesar hasta 200 toneladas." },
+      { q: "¿En qué ciudad se celebraron los Juegos Olímpicos de 2016?", opts: ["Londres", "Río de Janeiro", "Tokio", "Pekín"], ans: 1, exp: "Fueron los primeros Juegos Olímpicos celebrados en América del Sur, en Brasil." },
+      { q: "¿En qué año se llevó a cabo la Batalla de Boyacá, sellando la independencia de Colombia?", opts: ["1810", "1819", "1821", "1830"], ans: 1, exp: "Ocurrió el 7 de agosto de 1819, garantizando el éxito de la Campaña Libertadora de Nueva Granada liderada por Bolívar." },
+      { q: "¿Quién tradujo los Derechos del Hombre y del Ciudadano del francés al español en la Nueva Granada?", opts: ["Simón Bolívar", "Francisco de Paula Santander", "Antonio Nariño", "Camilo Torres"], ans: 2, exp: "Antonio Nariño los tradujo y publicó de forma clandestina en 1793, lo que le costó cárcel y exilio." },
+      { q: "¿Qué evento histórico desató el periodo conocido como 'El Bogotazo' en 1948?", opts: ["El golpe de estado de Rojas Pinilla", "El asesinato de Jorge Eliécer Gaitán", "El inicio de la Guerra de los Mil Días", "La separación de Panamá"], ans: 1, exp: "El 9 de abril de 1948 el líder popular liberal fue asesinado, provocando masivos disturbios que destruyeron el centro de Bogotá." },
+      { q: "¿Cuál es el río más largo que corre completamente dentro de territorio colombiano?", opts: ["Río Cauca", "Río Atrato", "Río Magdalena", "Río Putumayo"], ans: 2, exp: "Con una longitud de más de 1,500 km, el Río Magdalena es la principal arteria fluvial y económica histórica de Colombia." },
+      { q: "¿Cuántos departamentos conforman territorialmente a Colombia?", opts: ["28", "30", "32", "34"], ans: 2, exp: "Según la Constitución de 1991, Colombia se divide en 32 departamentos y un Distrito Capital (Bogotá)." },
+      { q: "¿Quién fue el primer presidente de la Gran Colombia?", opts: ["Simón Bolívar", "Francisco de Paula Santander", "Rafael Núñez", "Tomás Cipriano de Mosquera"], ans: 0, exp: "Simón Bolívar fue elegido presidente en 1819 tras el Congreso de Angostura que formó esta extensa nación." },
+      { q: "¿En qué año se promulgó la actual Constitución Política de Colombia?", opts: ["1886", "1991", "1994", "2000"], ans: 1, exp: "Fue promulgada el 4 de julio de 1991, reemplazando a la centenaria Constitución de 1886." },
+      { q: "¿Cuál es la flor nacional de Colombia?", opts: ["La Rosa", "La Margarita", "El Girasol", "La Orquídea"], ans: 3, exp: "Específicamente la variedad endémica *Cattleya trianae*, nombrada en honor al botánico colombiano Jerónimo Triana." },
+      { q: "¿Qué importante civilización precolombina habitó principalmente los departamentos de Cundinamarca y Boyacá?", opts: ["Los Tayronas", "Los Quimbayas", "Los Muiscas", "Los Calimas"], ans: 2, exp: "Los Muiscas fueron una cultura agraria y orfebre muy avanzada, de la cual se origina la famosa leyenda de El Dorado." },
+      { q: "¿Cuál de las siguientes ciudades fue fundada por el conquistador Pedro de Heredia?", opts: ["Santa Marta", "Bogotá", "Cali", "Cartagena de Indias"], ans: 3, exp: "Fue fundada el 1 de junio de 1533 y se convirtió en uno de los puertos más importantes de América española." },
+      { q: "¿Qué colombiano ganó el Premio Nobel de Literatura en 1982?", opts: ["Álvaro Mutis", "Gabriel García Márquez", "Fernando Vallejo", "Jorge Isaacs"], ans: 1, exp: "La Academia Sueca lo galardonó 'por sus novelas e historias cortas, en las que lo fantástico y lo real se combinan en un mundo ricamente compuesto'." },
+      { q: "¿Entre qué años se libró la Guerra de los Mil Días en Colombia?", opts: ["1899 - 1902", "1910 - 1913", "1886 - 1889", "1948 - 1951"], ans: 0, exp: "Fue el conflicto civil más devastador en la historia del país, enfrentando al Partido Liberal y al Partido Conservador." },
+      { q: "¿Cuál es el árbol nacional de Colombia?", opts: ["El Guayacán", "La Ceiba", "La Palma de Cera del Quindío", "El Roble Andino"], ans: 2, exp: "Es endémica del Valle de Cocora, puede alcanzar hasta 60 metros de altura y es la palmera más alta del mundo." },
+      { q: "¿Qué fecha se celebra como el Día de la Independencia de Cartagena?", opts: ["20 de julio", "7 de agosto", "12 de octubre", "11 de noviembre"], ans: 3, exp: "El 11 de noviembre de 1811 Cartagena se declaró como Estado soberano e independiente de la corona española." },
+      { q: "¿Cuál es el punto geográfico más alto de Colombia?", opts: ["El Volcán Nevado del Ruiz", "El Pico Cristóbal Colón", "El Ritacuba Blanco", "El Nevado del Huila"], ans: 1, exp: "Junto con su pico gemelo (Simón Bolívar) en la Sierra Nevada de Santa Marta, alcanza aproximadamente 5,730 m s.n.m." },
+      { q: "¿A qué presidente colombiano se le otorgó el Premio Nobel de la Paz en 2016?", opts: ["Álvaro Uribe Vélez", "Juan Manuel Santos", "Andrés Pastrana", "César Gaviria"], ans: 1, exp: "Se le otorgó por sus firmes esfuerzos para poner fin a la guerra de más de 50 años con la guerrilla de las FARC." },
+      { q: "¿Cuál fue el principal producto de exportación de Colombia durante la primera mitad del siglo XX?", opts: ["Banano", "Oro", "Petróleo", "Café"], ans: 3, exp: "El auge cafetero fue fundamental para integrar a Colombia en el mercado mundial moderno y estabilizar su economía." },
+      { q: "¿Con qué países comparte fronteras terrestres Colombia?", opts: ["Venezuela, Brasil, Perú, Ecuador y Panamá", "Venezuela, Brasil, Bolivia, Ecuador y Panamá", "Venezuela, Brasil, Perú, Chile y Panamá", "Venezuela, Argentina, Perú, Ecuador y Panamá"], ans: 0, exp: "Es el único país de América del Sur que cuenta con costas en los océanos Pacífico y Atlántico, y hace frontera terrestre con esos 5 países." },
+      { q: "¿Qué importante líder indígena luchó contra la colonización española en la región del Cauca?", opts: ["La Gaitana", "Tupac Amaru", "Benkos Biohó", "Atahualpa"], ans: 0, exp: "La Cacica Gaitana lideró una fuerte resistencia en la década de 1530 en represalia por el brutal asesinato de su hijo por los conquistadores." },
+      { q: "¿Cómo se llama la cultura precolombina famosa por su compleja orfebrería y el 'Poporo'?", opts: ["San Agustín", "Tierradentro", "Quimbaya", "Zenú"], ans: 2, exp: "La cultura Quimbaya destacó enormemente por su trabajo en tumbaga (aleación de oro y cobre) con una técnica y estética excepcionales." },
+      { q: "¿Cuál es el nombre oficial del miedo irracional a las palabras largas?", opts: ["Papirofobia", "Hipopotomonstrosesquipedaliofobia", "Aulofobia", "Pentaterafobia"], ans: 1, exp: "Irónicamente, la palabra para definir el miedo a las palabras largas es una de las más largas del diccionario." },
+      { q: "¿Cuál de estos animales NO puede saltar?", opts: ["Elefante", "Canguro", "Grillo", "Pulga"], ans: 0, exp: "Debido a su enorme peso y a la estructura de sus huesos, el elefante es el único mamífero que tiene cuatro rodillas pero no puede despegar las cuatro patas del suelo a la vez." },
+      { q: "¿Qué inventó accidentalmente el químico John Walker cuando intentaba limpiar una sustancia pegajosa de un palo?", opts: ["El chicle", "El pegamento líquido", "Los fósforos (cerillas)", "La dinamita"], ans: 2, exp: "Al raspar el palo contra el suelo para limpiar la punta, esta se encendió. Así nacieron los fósforos de fricción en 1826." },
+      { q: "¿Qué animal tiene las huellas dactilares tan parecidas a las humanas que a veces confunden a los forenses en escenas del crimen?", opts: ["Chimpancé", "Koala", "Perro", "Oso"], ans: 1, exp: "Los koalas tienen crestas dactilares tan similares a las nuestras que incluso bajo el microscopio es difícil distinguirlas." },
+      { q: "En 2006, un hombre intentó vender ¿qué país? a través de una subasta en eBay.", opts: ["Nueva Zelanda", "Islandia", "Grecia", "Suiza"], ans: 0, exp: "Un ciudadano australiano intentó vender Nueva Zelanda con un precio inicial de 0.01 dólares. La oferta llegó a 3,000 dólares antes de que eBay cerrara la subasta." },
+      { q: "¿Cuál fue el primer juguete que se anunció por televisión en la historia?", opts: ["Barbie", "LEGO", "Sr. Cara de Papa (Mr. Potato Head)", "Hot Wheels"], ans: 2, exp: "Fue en 1952. Curiosamente, en esa época el juguete consistía solo en las piezas, y los niños debían usar una papa real de su cocina para armarlo." },
+      { q: "¿Qué parte de su cuerpo usan las mariposas para percibir el sabor de las cosas?", opts: ["Las alas", "Las antenas", "Las patas", "La espiritrompa"], ans: 2, exp: "Tienen sensores químicos en sus patas; al posarse sobre una flor o planta, saben inmediatamente si es algo dulce o apto para poner sus huevos." },
+      { q: "¿Cómo se llama el sonido que hace el estómago cuando tienes hambre (y que suena como un rugido)?", opts: ["Gorgorismo", "Borborigmo", "Estruendo gástrico", "Flatulencia"], ans: 1, exp: "El término médico es 'borborigmo' y es causado por el movimiento de gases y fluidos a través de los intestinos." },
+      { q: "¿Cuál de estas frutas pertenece técnicamente a la familia de las bayas, mientras que la fresa NO lo es?", opts: ["Manzana", "Banana", "Pera", "Durazno"], ans: 1, exp: "Botánicamente, una baya es un fruto producido a partir de un solo ovario. La banana y la sandía son bayas, pero la fresa es un 'fruto accesorio'." },
+      { q: "¿Qué animal produce una leche de color rosa brillante?", opts: ["Hipopótamo", "Flamenco", "Ornitorrinco", "Cerdo"], ans: 0, exp: "El hipopótamo secreta dos tipos de ácidos (hiposudórico y norhiposudórico) que al mezclarse con la leche blanca le dan un tono rosáceo." },
+      { q: "¿Cuál es el récord de tiempo que una gallina ha logrado volar sin tocar el suelo?", opts: ["13 segundos", "1 minuto", "5 minutos", "30 segundos"], ans: 0, exp: "El vuelo más largo registrado de una gallina doméstica es de apenas 13 segundos (recorriendo unos 91 metros)." },
+      { q: "¿Qué país tiene más flamencos de plástico que flamencos reales?", opts: ["España", "Estados Unidos", "México", "Chile"], ans: 1, exp: "Desde que fueron inventados en 1957 como adorno de jardín, las ventas de flamencos rosas de plástico en EE.UU. superan por mucho a la población mundial de flamencos vivos." },
+      { q: "Si Google detecta que no tienes internet, ¿qué animal aparece para que juegues un minijuego?", opts: ["Un gato", "Un dinosaurio", "Un perro", "Un alien"], ans: 1, exp: "Es un Tiranosaurio Rex, haciendo alusión a que estar sin internet es como vivir en la 'era prehistórica'." },
+      { q: "¿Cuál es el nombre del municipio en Boyacá que, curiosamente, se llama igual que un país europeo?", opts: ["Francia", "Grecia", "Turquía", "Jericó"], ans: 1, exp: "Se trata de Grecia, Boyacá. Aunque también tenemos municipios como Belén, Jericó (Antioquia) o Egipto (barrio en Bogotá), Grecia es el que más confunde en mapas." },
+      { q: "¿Qué ingrediente 'polémico' le echan muchos colombianos al chocolate caliente o al aguapanela?", opts: ["Sal", "Pimienta", "Queso", "Mantequilla"], ans: 2, exp: "Poner queso dentro del chocolate es una tradición colombiana que horroriza a extranjeros pero que nosotros defendemos a capa y espada." },
+      { q: "¿En qué ciudad de Colombia es común que te digan '¿Bien o qué?' como saludo oficial?", opts: ["Bogotá", "Medellín", "Cali", "Barranquilla"], ans: 1, exp: "Es la marca registrada del saludo paisa. Si no respondes 'Bien, ¿y vos?', probablemente no estés en Medellín." },
+      { q: "Si un colombiano te dice que algo está 'a pedir de boca', ¿qué significa?", opts: ["Que está muy caro", "Que está perfecto o como se deseaba", "Que tiene mucha hambre", "Que alguien está gritando"], ans: 1, exp: "Es una expresión usada para indicar que algo salió exactamente como se quería o que está en su punto ideal." },
+      { q: "¿Cuál es el nombre del plato que lleva arroz, huevo, carne molida, chicharrón, tajada, chorizo y aguacate?", opts: ["Ajiaco", "Bandeja Paisa", "Sancocho", "Mote de Queso"], ans: 1, exp: "La Bandeja Paisa es famosa por su enorme cantidad de calorías y por ser el 'terror' de las dietas, pero el orgullo de Antioquia." },
+      { q: "¿Qué animal aparece en la moneda de 500 pesos colombianos?", opts: ["El Cóndor de los Andes", "La Rana de Cristal", "La Tortuga Caguama", "El Oso de Anteojos"], ans: 1, exp: "La moneda de 500 pesos rinde homenaje a la rana de cristal, un anfibio fascinante que habita en nuestras selvas." },
+      { q: "¿Cuál es el 'deporte nacional' de Colombia que consiste en lanzar discos de metal a unos sobres con pólvora?", opts: ["Fútbol", "Ciclismo", "Tejo (Turmequé)", "Bolo Criollo"], ans: 2, exp: "El Tejo es el único deporte nacional por ley. No hay nada más colombiano que celebrar una 'mecha' con un estallido de pólvora." },
+      { q: "¿Qué significa la expresión colombiana 'Hacer una vaca'?", opts: ["Comprar ganado", "Recolectar dinero entre varias personas", "Irse a dormir temprano", "Cocinar carne de res"], ans: 1, exp: "'Hacer una vaca' es la solución colombiana para comprar la pizza o el trago cuando nadie tiene suficiente dinero por separado." },
+      { q: "¿En qué ciudad se celebra el festival de 'Blancos y Negros'?", opts: ["Quibdó", "Pasto", "Riohacha", "Manizales"], ans: 1, exp: "Se celebra en Pasto cada enero y es Patrimonio Cultural de la Humanidad. ¡Nadie se salva de quedar pintado de cosmético o harina!" },
+      { q: "¿Cuál es el nombre del famoso sistema de transporte masivo de Bogotá que todos aman odiar?", opts: ["Metro", "TransMilenio", "Mío", "Transmetro"], ans: 1, exp: "TransMilenio se inauguró en el año 2000. Aunque es vital para la ciudad, es el protagonista de miles de memes y anécdotas diarias." },
+      { q: "Si alguien te dice que 'está tragado', ¿qué le pasa?", opts: ["Que comió mucho", "Que está muy enamorado", "Que lo detuvo la policía", "Que tiene sueño"], ans: 1, exp: "En Colombia, 'estar tragado' no tiene nada que ver con comida, sino con estar profundamente enamorado de alguien." },
+      { q: "¿Cuál es la capital mundial del vallenato?", opts: ["Montería", "Sincelejo", "Valledupar", "Santa Marta"], ans: 2, exp: "Valledupar es la cuna del acordeón y cada año celebra el Festival de la Leyenda Vallenata." },
+      { q: "¿Qué pasa si un colombiano te dice 'nos vemos a las 8'?", opts: ["Llegará a las 7:50", "Llegará a las 8 en punto", "Llegará probablemente a las 8:30 o 9:00", "No va a ir"], ans: 2, exp: "La 'hora colombiana' es un fenómeno social donde llegar 30 minutos tarde se considera, en muchos contextos, como llegar 'a tiempo'." },
+      { q: "¿Qué animal fue el primer 'Bug' real de la historia, hallado dentro de una computadora Mark II en 1947?", opts: ["Una cucaracha", "Una polilla", "Una araña", "Un ratón"], ans: 1, exp: "Grace Hopper halló una polilla atrapada en un relé de la computadora. La pegó en el diario de bitácora con la frase: 'Primer caso real de bicho (bug) siendo hallado'." },
+      { q: "¿Cuál es la principal causa de que un código que funcionaba ayer, hoy no funcione sin haber tocado nada?", opts: ["Rayos cósmicos", "El caché", "Fuerzas oscuras", "Mercurio retrógrado"], ans: 1, exp: "Aunque los rayos cósmicos pueden alterar bits, el 99% de las veces es el caché, una dependencia que se actualizó sola o una variable de entorno que alguien cambió." },
+      { q: "¿Cómo se llama la 'ley' que dice que el desarrollo de software siempre tarda más de lo que esperas, incluso cuando tienes en cuenta esta ley?", opts: ["Ley de Moore", "Ley de Murphy", "Ley de Hofstadter", "Ley de Brooks"], ans: 2, exp: "La Ley de Hofstadter es un bucle infinito recursivo que explica por qué los 'deadlines' son el mayor mito de nuestra industria." },
+      { q: "¿Qué significa cuando un programador dice que un error en el sistema 'No es un bug, es una...'?", opts: ["Actualización", "Optimización", "Funcionalidad (Feature)", "Sugerencia"], ans: 2, exp: "Es la frase clásica para documentar un error inesperado que decidimos dejar en el sistema porque 'aporta algo' (o no sabemos cómo arreglarlo)." },
+      { q: "¿Cuál es el lenguaje de programación 'esotérico' que solo utiliza 8 caracteres y es casi imposible de leer?", opts: ["Java", "Brainf*ck", "Python", "C++"], ans: 1, exp: "Brainf*ck fue diseñado para ser minimalista y extremadamente difícil de programar, ideal para masoquistas del código." },
+      { q: "¿Cuál fue el primer dominio registrado en la historia de Internet (marzo de 1985)?", opts: ["apple.com", "google.com", "symbolics.com", "microsoft.com"], ans: 2, exp: "Symbolics.com fue el primero. Eran una empresa de computadoras que fabricaba máquinas basadas en Lisp." },
+      { q: "¿Qué significa la frase 'Rubber Ducking' (Pato de Goma) en programación?", opts: ["Regalar juguetes", "Decorar el setup", "Explicarle el código a un objeto inanimado para hallar errores", "Un tipo de cifrado"], ans: 2, exp: "Al explicar el flujo del código en voz alta a un patito de goma, el cerebro procesa el error de lógica por sí mismo. ¡Funciona mejor que StackOverflow!" },
+      { q: "En la cultura geek, ¿cuál es la 'Respuesta a la Pregunta Definitiva sobre la Vida, el Universo y Todo'?", opts: ["101", "42", "7", "Error 404"], ans: 1, exp: "Según 'Guía del autoestopista galáctico' de Douglas Adams, una supercomputadora tardó 7.5 millones de años en calcular que la respuesta es 42." },
+      { q: "¿Cuál es el nombre del lenguaje de programación creado por el cofundador de Netscape que se escribió en solo 10 días?", opts: ["PHP", "JavaScript", "Ruby", "TypeScript"], ans: 1, exp: "Brendan Eich creó JavaScript en 10 días en mayo de 1995. Eso explica algunas de sus... 'peculiaridades' matemáticas iniciales." },
+      { q: "¿Qué pasa si intentas acceder al código 418 de una respuesta HTTP?", opts: ["Forbidden", "I'm a teapot (Soy una tetera)", "Bad Gateway", "Enhance your calm"], ans: 1, exp: "Es un protocolo de broma (HTCPCP) creado para el Día de los Inocentes en 1998 para cafeteras conectadas a internet." },
+      { q: "¿Cuál es la mentira más grande que un desarrollador se dice a sí mismo?", opts: ["'Lo termino en 5 minutos'", "'No necesito documentación'", "'Este cambio no romperá nada en producción'", "Todas las anteriores"], ans: 3, exp: "El exceso de optimismo es el compilador por defecto del corazón de un desarrollador." },
+      { q: "¿Por qué los programadores prefieren el 'Dark Mode' (Modo Oscuro)?", opts: ["Porque se ve más cool", "Porque la luz atrae a los bichos (bugs)", "Por salud visual", "Para ahorrar batería"], ans: 1, exp: "Es un chiste clásico: 'La luz atrae a los bugs'. Aunque en realidad es para no quedar ciegos tras 12 horas frente al monitor." },
+      { q: "¿Cuál de estos NO es un nombre real de una vulnerabilidad famosa?", opts: ["Heartbleed", "Shellshock", "Meltdown", "BlueScreenOfDeath"], ans: 3, exp: "Blue Screen of Death es un error crítico de Windows, pero no es el nombre de un exploit o vulnerabilidad de seguridad como los otros tres." },
+      { q: "¿Qué hace el comando 'sudo' en sistemas Linux/Unix?", opts: ["Saludar al usuario", "Ejecutar con privilegios de superusuario", "Borrar archivos temporales", "Optimizar el disco"], ans: 1, exp: "Sudo (SuperUser Do) es el 'Hazme un sándwich' del mundo de los servidores. Si él lo dice, se hace." }
 
     ];
-
 
     /* ════════════════════════════════════════════
        STATE
@@ -1498,8 +1364,6 @@
     let scores = { a: 0, b: 0 };
     let playerScores = { a: [], b: [] };
     let turnIndex = 0; // global turn count
-    let turnIndexA = 0; // turno independiente equipo A
-    let turnIndexB = 0; // turno independiente equipo B
     let currentTeam = 'a';
     let currentQ = null;
     let timerInterval = null;
@@ -1568,14 +1432,10 @@
       err.textContent = '';
       scores = { a: 0, b: 0 };
       playerScores = {
-        //a: teamA.map(n => ({ name: n.trim() || 'Jugador', pts: 0 })),
-        //b: teamB.map(n => ({ name: n.trim() || 'Jugador', pts: 0 }))
-        a: teamA.map(name => ({ name: name, pts: 0 })),
-        b: teamB.map(name => ({ name: name, pts: 0 }))
+        a: teamA.map(n => ({ name: n.trim() || 'Jugador', pts: 0 })),
+        b: teamB.map(n => ({ name: n.trim() || 'Jugador', pts: 0 }))
       };
       turnIndex = 0;
-      turnIndexA = 0;
-      turnIndexB = 0;
       currentTeam = 'a';
       questionPool = shuffle([...ALL_QUESTIONS]);
       qIndex = 0;
@@ -1613,9 +1473,8 @@
       document.getElementById('ll-extra').innerHTML = '';
 
       const isA = currentTeam === 'a';
-      const roundIndex = Math.floor(qIndex / 2);
-      const aIdx = roundIndex % teamA.length;
-      const bIdx = roundIndex % teamB.length;
+      const aIdx = Math.floor(turnIndex / 2) % teamA.length;
+      const bIdx = Math.floor(turnIndex / 2) % teamB.length;
       const pIdx = isA ? aIdx : bIdx;
       const player = isA ? playerScores.a[pIdx] : playerScores.b[pIdx];
 
@@ -1786,24 +1645,21 @@
       if (idx !== correct && btns[idx]) btns[idx].className = 'opt-btn wrong';
 
       const isA = currentTeam === 'a';
-      // roundIndex = qué ronda de jugadores vamos (0-based)
-      // Equipo A juega primero en cada ronda (qIndex par), B segundo (qIndex impar)
-      const roundIndex = Math.floor(qIndex / 2);
-      const pIdx = isA ? (roundIndex % teamA.length) : (roundIndex % teamB.length);
+      const pIdx = Math.floor(turnIndex / 2) % (isA ? teamA.length : teamB.length);
+      const prize = PRIZES[prizeLevel];
       const zone = document.getElementById('reveal-zone');
 
       if (idx === correct) {
-        // Exactamente 1 punto por jugador, sin importar el nivel de premio
-        if (isA) { scores.a += 1; playerScores.a[pIdx].pts += 1; }
-        else { scores.b += 1; playerScores.b[pIdx].pts += 1; }
-        document.getElementById('pts-a').textContent = scores.a.toLocaleString() + ' Puntos';
-        document.getElementById('pts-b').textContent = scores.b.toLocaleString() + ' Puntos';
+        if (isA) { scores.a += prize; playerScores.a[pIdx].pts += prize; }
+        else { scores.b += prize; playerScores.b[pIdx].pts += prize; }
+        document.getElementById('pts-a').textContent =  scores.a.toLocaleString() + ' Puntos';
+        document.getElementById('pts-b').textContent =  scores.b.toLocaleString() + ' Puntos';
         stopAll();
         snd('snd-correcto');
         zone.innerHTML = `<div class="reveal-card correct-reveal">
       <div class="reveal-icon">✓</div>
       <div class="reveal-msg">¡Correcto!</div>
-      <div class="reveal-sub">+1 Punto para ${isA ? 'Equipo A' : 'Equipo B'} — ${isA ? playerScores.a[pIdx].name : playerScores.b[pIdx].name}</div>
+      <div class="reveal-sub">+PUNTOS: ${prize.toLocaleString()} para ${isA ? 'Equipo A' : 'Equipo B'}</div>
       <div class="reveal-exp">${currentQ.exp}</div>
     </div>`;
       } else {
@@ -1838,7 +1694,8 @@
 
     function nextTurn() {
       qIndex++;
-      currentTeam = (currentTeam === 'a') ? 'b' : 'a';
+      if (currentTeam === 'a') { currentTeam = 'b'; }
+      else { currentTeam = 'a'; turnIndex++; }
       loadTurn();
     }
 
@@ -1970,9 +1827,6 @@
       stopAll();
       teamA = [];
       teamB = [];
-      turnIndex = 0;
-      turnIndexA = 0;
-      turnIndexB = 0;
       teamLifelines = {
         a: { '5050': false, audience: false, phone: false, skip: false },
         b: { '5050': false, audience: false, phone: false, skip: false }

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'millonario-v2.1';
+const CACHE_NAME = 'millonario-v3';
 const assets = ['./', 
         './index.html', 
          './manifest.json',
